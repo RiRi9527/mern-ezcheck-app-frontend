@@ -1,5 +1,6 @@
 import { useGetAccount, useUpdateAccount } from "@/api/AccountApi";
 import { useGetAllUsers } from "@/api/AuthApi";
+import MyCalendar from "@/big-react-calendar/big-react-calender";
 import MainUsersNav, { NavListUser } from "@/components/MainUsersNav";
 import MobileUsersNav from "@/components/MobileUsersNav";
 import { useAppContext } from "@/content/AppContext";
@@ -75,7 +76,9 @@ const UserProfileAdminPage = () => {
           <div className="md:order-1">1</div>
         </div>
         {/* Placeholder for additional content */}
-        <div>3</div>
+        <div>
+          <MyCalendar />
+        </div>
       </div>
 
       {/* Sidebar for desktop view */}
