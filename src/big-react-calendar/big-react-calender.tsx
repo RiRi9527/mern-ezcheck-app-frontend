@@ -1,5 +1,6 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./index.css";
 import moment from "moment";
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
@@ -62,20 +63,28 @@ const MyCalendar = () => {
       if (time >= 8 * 1000 * 60 * 60) {
         return {
           style: {
-            backgroundColor: "rgba(0, 255, 0, 0.7)", // Green color with 30% opacity
+            backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
           },
         };
       }
       if (time < 7.83 * 1000 * 60 * 60) {
         return {
           style: {
-            backgroundColor: "rgba(255, 0, 0, 0.7)", // Red color with 30% opacity
+            backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
           },
         };
       }
     }
 
     return {};
+  };
+
+  const handleEventSelect = (event: any) => {
+    console.log(event);
+  };
+
+  const handleSlotSelect = (event: any) => {
+    console.log("Selected slot:", event.start, event.end);
   };
 
   return (
@@ -98,6 +107,9 @@ const MyCalendar = () => {
         }}
         backgroundEvents={backgroundEvents} // Set background events
         eventPropGetter={eventStyleGetter}
+        onSelectEvent={handleEventSelect}
+        onSelectSlot={handleSlotSelect}
+        selectable
       />
     </div>
   );

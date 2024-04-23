@@ -1,0 +1,15 @@
+.rbc-header {
+  background: blue;
+  color: white;
+}
+
+div[role="button"][title*="Actual Time"] {
+  display: flex;
+  flex-direction: column-reverse;
+  /* opacity: 0.5; */
+}
+
+div[role="button"][title*="Actual Time"] .rbc-event-content {
+  display: flex;
+  flex-direction: column-reverse;
+}
