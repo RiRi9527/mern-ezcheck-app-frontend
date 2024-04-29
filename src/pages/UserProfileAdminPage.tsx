@@ -1,8 +1,10 @@
 import { useGetAccount, useUpdateAccount } from "@/api/AccountApi";
 import { useGetAllUsers } from "@/api/AuthApi";
+import { useCreateEvent } from "@/api/CalendarApi";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
 import MainUsersNav, { NavListUser } from "@/components/MainUsersNav";
 import MobileUsersNav from "@/components/MobileUsersNav";
+import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/content/AppContext";
 import ManageAccountForm from "@/forms/manage-account-form/ManageAccountForm";
 import { useEffect, useState } from "react";
@@ -49,6 +51,23 @@ const UserProfileAdminPage = () => {
     refetchUser();
   }, [userId, refetchUser]);
 
+  // check in
+
+  const { createEvent, isLoading: isCreateEventLoading } =
+    useCreateEvent(userId);
+
+  const handleCheckIn = () => {
+    const endTime = new Date();
+    endTime.setHours(endTime.getHours() + 1);
+    const eventData = {
+      title: "Work Hours",
+      startTime: new Date().toString(),
+      endTime: endTime.toString(),
+    };
+
+    createEvent(eventData);
+  };
+
   // Display an error message if there is an error fetching the user data
   if (isError) {
     return <>Error fetching user data (404 Not Found)</>;
@@ -57,6 +76,10 @@ const UserProfileAdminPage = () => {
   // Display a loading message while data is being fetched
   if (isGetLoading) {
     return <span>Loading...</span>;
+  }
+
+  if (isCreateEventLoading) {
+    return <span>Event creating...</span>;
   }
 
   return (
@@ -73,7 +96,13 @@ const UserProfileAdminPage = () => {
             />
           </div>
           {/* Placeholder for additional content */}
-          <div className="md:order-1">1</div>
+          <div className="md:order-1">
+            <div className="flex flex-col space-y-2">
+              <Button onClick={handleCheckIn}>Check in</Button>
+              <Button>Check out</Button>
+              <Button>Lunch</Button>
+            </div>
+          </div>
         </div>
         {/* Placeholder for additional content */}
         <div>

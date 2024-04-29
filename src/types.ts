@@ -9,3 +9,9 @@ export type User = {
   isAdmin: boolean;
   imageUrl: string;
 };
+
+export type EventData = {
+  title: string;
+  startTime: string;
+  endTime: string;
+};
