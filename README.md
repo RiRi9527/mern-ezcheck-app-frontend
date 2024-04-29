@@ -47,6 +47,21 @@ auth can be undefined; it will crash due to page refresh. So when I use content,
 
 ----:
 
+When the frontend sends a request to the backend, the JSON file is not successfully transmitted
+
+     headers: {
+        "Content-Type": "application/json",
+      },
+
+ need to add this line of code to ensure that the JSON file is transmitted successfully.
+
+ Problem need to be solved:
+
+
+---：How to find the correct event to update during checkout
+
+
+ 
 
 
 
