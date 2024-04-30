@@ -2,12 +2,29 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import moment from "moment";
+import EventDialog from "@/components/EventDialog";
+import { useState } from "react";
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
 const MyCalendar = () => {
+  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+
+  const closeEventDialog = () => {
+    setIsEventDialogOpen(false);
+  };
+
+  const handleEventSelect = (event: any) => {
+    setIsEventDialogOpen(true);
+    console.log(event);
+  };
+
+  const handleSlotSelect = (event: any) => {
+    console.log("Selected slot:", event.start, event.end);
+  };
+
   const generateWorkHours = () => {
     const startOfWeek = moment().startOf("week"); // Start date of the week
     const endOfWeek = moment().endOf("week"); // End date of the week
@@ -79,39 +96,39 @@ const MyCalendar = () => {
     return {};
   };
 
-  const handleEventSelect = (event: any) => {
-    console.log(event);
-  };
-
-  const handleSlotSelect = (event: any) => {
-    console.log("Selected slot:", event.start, event.end);
-  };
+  console.log(isEventDialogOpen);
 
   return (
-    <div className="myCustomHeight" style={{ height: 600 }}>
-      <Calendar
-        // dayLayoutAlgorithm="no-overlap"
-        localizer={localizer}
-        events={myEventsList}
-        startAccessor="start"
-        endAccessor="end"
-        min={new Date(0, 0, 0, 8)} // Set calendar start time to 8:00 AM
-        max={new Date(0, 0, 0, 23)} // Set calendar end time to 8:00 PM
-        defaultView="work_week"
-        views={{
-          month: true,
-          week: true,
-          work_week: true,
-          day: true,
-          agenda: true,
-        }}
-        backgroundEvents={backgroundEvents} // Set background events
-        eventPropGetter={eventStyleGetter}
-        onSelectEvent={handleEventSelect}
-        onSelectSlot={handleSlotSelect}
-        selectable
+    <>
+      <div className="myCustomHeight" style={{ height: 600 }}>
+        <Calendar
+          // dayLayoutAlgorithm="no-overlap"
+          localizer={localizer}
+          events={myEventsList}
+          startAccessor="start"
+          endAccessor="end"
+          min={new Date(0, 0, 0, 8)} // Set calendar start time to 8:00 AM
+          max={new Date(0, 0, 0, 23)} // Set calendar end time to 8:00 PM
+          defaultView="work_week"
+          views={{
+            month: true,
+            week: true,
+            work_week: true,
+            day: true,
+            agenda: true,
+          }}
+          backgroundEvents={backgroundEvents} // Set background events
+          eventPropGetter={eventStyleGetter}
+          onSelectEvent={handleEventSelect}
+          onSelectSlot={handleSlotSelect}
+          selectable
+        />
+      </div>
+      <EventDialog
+        isEventDialogOpen={isEventDialogOpen}
+        closeEventDialog={closeEventDialog}
       />
-    </div>
+    </>
   );
 };
 export default MyCalendar;

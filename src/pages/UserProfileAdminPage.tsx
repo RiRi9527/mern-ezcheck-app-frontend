@@ -57,12 +57,9 @@ const UserProfileAdminPage = () => {
     useCreateEvent(userId);
 
   const handleCheckIn = () => {
-    const endTime = new Date();
-    endTime.setHours(endTime.getHours() + 1);
     const eventData = {
       title: "Work Hours",
       startTime: new Date().toString(),
-      endTime: endTime.toString(),
     };
 
     createEvent(eventData);

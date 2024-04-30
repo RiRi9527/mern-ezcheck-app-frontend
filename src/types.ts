@@ -12,6 +12,6 @@ export type User = {
 
 export type EventData = {
   title: string;
-  startTime: string;
-  endTime: string;
+  startTime?: string;
+  endTime?: string;
 };
