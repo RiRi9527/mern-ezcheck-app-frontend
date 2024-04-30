@@ -28,3 +28,42 @@ export default {
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+
+-----------------------------
+
+Problem I solved:
+
+----:
+type AppContext = {
+  isLoggedIn: boolean;
+  auth: User | undefined;
+};
+
+auth can be undefined; it will crash due to page refresh. So when I use content, I need to put a '?' after 'auth' like this
+  const disable =
+    auth?.position !== "CEO" && auth?.position !== "Office Manager";
+
+
+----:
+
+When the frontend sends a request to the backend, the JSON file is not successfully transmitted
+
+     headers: {
+        "Content-Type": "application/json",
+      },
+
+ need to add this line of code to ensure that the JSON file is transmitted successfully.
+
+ Problem need to be solved:
+
+
+---：How to find the correct event to update during checkout
+
+
+ 
+
+
+
+
+
