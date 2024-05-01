@@ -1,25 +1,22 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "./ui/dialog";
+import { EventData } from "@/types";
+import { Dialog, DialogContent } from "./ui/dialog";
+import EventFrom from "@/forms/event-form/EventForm";
 
 interface EventDialogProps {
   isEventDialogOpen: boolean; // Define the type of isEventDialogOpen
   closeEventDialog: () => void;
+  selectedEvent?: EventData;
 }
 
 const EventDialog: React.FC<EventDialogProps> = ({
   isEventDialogOpen,
   closeEventDialog,
+  selectedEvent,
 }) => {
   return (
     <Dialog open={isEventDialogOpen} onOpenChange={closeEventDialog}>
       <DialogContent>
-        <DialogHeader>
-          <DialogDescription>11111</DialogDescription>
-        </DialogHeader>
+        <EventFrom event={selectedEvent} />
       </DialogContent>
     </Dialog>
   );

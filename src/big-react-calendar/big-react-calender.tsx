@@ -4,6 +4,7 @@ import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
 import { useState } from "react";
+import { EventData } from "@/types";
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
@@ -11,6 +12,7 @@ const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
 const MyCalendar = () => {
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
 
   const closeEventDialog = () => {
     setIsEventDialogOpen(false);
@@ -18,7 +20,13 @@ const MyCalendar = () => {
 
   const handleEventSelect = (event: any) => {
     setIsEventDialogOpen(true);
-    console.log(event);
+    let SelectedEvent: EventData = {
+      _id: event._id,
+      title: event.title,
+      startTime: event.start.toString(),
+      endTime: event.end.toString(),
+    };
+    setSelectedEvent(SelectedEvent);
   };
 
   const handleSlotSelect = (event: any) => {
@@ -96,8 +104,6 @@ const MyCalendar = () => {
     return {};
   };
 
-  console.log(isEventDialogOpen);
-
   return (
     <>
       <div className="myCustomHeight" style={{ height: 600 }}>
@@ -127,6 +133,7 @@ const MyCalendar = () => {
       <EventDialog
         isEventDialogOpen={isEventDialogOpen}
         closeEventDialog={closeEventDialog}
+        selectedEvent={selectedEvent}
       />
     </>
   );

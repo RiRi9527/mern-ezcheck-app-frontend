@@ -1,10 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 import { useCreateAccount } from "@/api/AccountApi";
 import { useAppContext } from "@/content/AppContext";
@@ -33,18 +27,14 @@ const RegisterDialog = () => {
         </div>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogDescription>
-            <div className="md:order-2">
-              <ManageAccountForm
-                onSave={createAccount}
-                isLoading={isCreateLoading}
-                isSuccess={isSuccess}
-                userId={userId}
-              />
-            </div>
-          </DialogDescription>
-        </DialogHeader>
+        <div className="md:order-2">
+          <ManageAccountForm
+            onSave={createAccount}
+            isLoading={isCreateLoading}
+            isSuccess={isSuccess}
+            userId={userId}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );
