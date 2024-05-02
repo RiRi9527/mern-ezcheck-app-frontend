@@ -1,6 +1,6 @@
+import { useCreateEvent } from "@/api/EventApi";
 import { EventData } from "@/types";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 
 // export type EventData = {
 //   _id: string;
@@ -11,32 +11,31 @@ import { Link } from "react-router-dom";
 
 type Props = {
   event?: EventData;
+  userId?: string;
 };
 
-const EventFrom = ({ event }: Props) => {
+const EventFrom = ({ event, userId }: Props) => {
   const {
     register,
     formState: { errors },
-    // handleSubmit,
+    handleSubmit,
   } = useForm<EventData>({ defaultValues: event });
 
-  //   const onSubmit = async (event: LoginFormData) => {
-  //     onSave(signInFormData);
-  //   };
+  const { isLoading: isCreateLoading, createEvent } = useCreateEvent(userId);
+
+  const onSubmit = async (eventData: EventData) => {
+    if (!event?._id) {
+      createEvent(eventData);
+    }
+  };
 
   return (
-    <form className="flex flex-col gap-5 border-8 border-gray-500 p-16">
-      <h2 className="text-3xl font-bold">Event</h2>
-      <label className="text-gray-700 text-sm font-bold flex-1">
-        _id
-        <input
-          className="border rounded w-full py-1 px-2 font-normal"
-          {...register("_id", { required: "This field is required" })}
-        ></input>
-        {errors._id && (
-          <span className="text-red-500">{errors._id.message}</span>
-        )}
-      </label>
+    <form
+      className="flex flex-col p-2 space-y-4"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <h2 className="text-3xl font-bold">Event -{event?._id}</h2>
+
       <label className="text-gray-700 text-sm font-bold flex-1">
         title
         <input
@@ -85,23 +84,17 @@ const EventFrom = ({ event }: Props) => {
           <span className="text-red-500">{errors.endTime.message}</span>
         )}
       </label>
-      <span className="flex items-center justify-between">
-        <span className="text-sm">
-          Not Registered?{" "}
-          <Link className="underline" to="/">
-            Please contact manager
-          </Link>
-        </span>
-        {false ? (
-          <button className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl ml-3">
+      <span>
+        {isCreateLoading ? (
+          <button className="bg-blue-600 text-white w-full p-2 font-bold hover:bg-blue-500 text-xl rounded-sm">
             Loading
           </button>
         ) : (
           <button
             type="submit"
-            className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl ml-3"
+            className="bg-blue-600 text-white w-full p-2 font-bold hover:bg-blue-500 text-xl rounded-sm"
           >
-            Log In
+            Submit
           </button>
         )}
       </span>

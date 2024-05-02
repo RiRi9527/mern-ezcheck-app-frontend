@@ -10,7 +10,11 @@ import { EventData } from "@/types";
 // to the correct localizer.
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
-const MyCalendar = () => {
+interface MyCalendarProps {
+  userId?: string;
+}
+
+const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
 
@@ -30,7 +34,15 @@ const MyCalendar = () => {
   };
 
   const handleSlotSelect = (event: any) => {
-    console.log("Selected slot:", event.start, event.end);
+    // console.log("Selected slot:", event.start, event.end);
+    setIsEventDialogOpen(true);
+    let SelectedEvent: EventData = {
+      _id: event._id,
+      title: event.title,
+      startTime: event.start.toString(),
+      endTime: event.end.toString(),
+    };
+    setSelectedEvent(SelectedEvent);
   };
 
   const generateWorkHours = () => {
@@ -134,6 +146,7 @@ const MyCalendar = () => {
         isEventDialogOpen={isEventDialogOpen}
         closeEventDialog={closeEventDialog}
         selectedEvent={selectedEvent}
+        userId={userId}
       />
     </>
   );

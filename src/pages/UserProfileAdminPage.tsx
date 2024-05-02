@@ -1,6 +1,6 @@
 import { useGetAccount, useUpdateAccount } from "@/api/AccountApi";
 import { useGetAllUsers } from "@/api/AuthApi";
-import { useCreateEvent } from "@/api/CalendarApi";
+import { useCreateEvent } from "@/api/EventApi";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
 import MainUsersNav, { NavListUser } from "@/components/MainUsersNav";
 import MobileUsersNav from "@/components/MobileUsersNav";
@@ -103,7 +103,7 @@ const UserProfileAdminPage = () => {
         </div>
         {/* Placeholder for additional content */}
         <div>
-          <MyCalendar />
+          <MyCalendar userId={userId} />
         </div>
       </div>
 
