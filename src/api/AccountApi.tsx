@@ -5,7 +5,7 @@ import { toast } from "sonner";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const useGetAccount = (userId?: string) => {
-  const createGetUserRequest = async (): Promise<User> => {
+  const getUserRequest = async (): Promise<User> => {
     const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
       credentials: "include",
     });
@@ -21,7 +21,7 @@ export const useGetAccount = (userId?: string) => {
     isLoading,
     isError,
     refetch,
-  } = useQuery("fetchUser", createGetUserRequest, {
+  } = useQuery("fetchUser", getUserRequest, {
     enabled: !!userId,
   });
 

@@ -3,8 +3,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EventData } from "@/types";
+import { useGetEvents } from "@/api/EventApi";
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
@@ -15,6 +16,17 @@ interface MyCalendarProps {
 }
 
 const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
+  const {
+    events,
+
+    refetch: refetchEvents,
+  } = useGetEvents(userId);
+
+  // Refetch the events data whenever the userId changes
+  useEffect(() => {
+    refetchEvents();
+  }, [userId, refetchEvents]);
+
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
 
@@ -122,7 +134,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
         <Calendar
           // dayLayoutAlgorithm="no-overlap"
           localizer={localizer}
-          events={myEventsList}
+          events={events}
           startAccessor="start"
           endAccessor="end"
           min={new Date(0, 0, 0, 8)} // Set calendar start time to 8:00 AM
