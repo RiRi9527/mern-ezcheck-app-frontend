@@ -3,7 +3,6 @@ import { useAppContext } from "@/content/AppContext";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
 export type AccountFromData = {
   userName: string;
@@ -28,11 +27,11 @@ type Props = {
 const ManageAccountForm = ({
   onSave,
   isLoading,
-  isSuccess,
-  userId,
+  // isSuccess,
+  // userId,
   account,
 }: Props) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { auth } = useAppContext();
   const disable =
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
@@ -54,6 +53,8 @@ const ManageAccountForm = ({
 
   const existingImageUrls = watch("imageUrl");
 
+  const { refetch } = useGetAllUsers();
+
   const onSubmit = async (formDataJson: AccountFromData) => {
     const formData = new FormData();
     const isAdminBoolean = formDataJson.isAdmin === "Yes";
@@ -68,22 +69,23 @@ const ManageAccountForm = ({
       const imageFile = formDataJson.imageFile[0];
       formData.append("imageFile", imageFile);
     }
-    onSave(formData);
+    await onSave(formData);
+    refetch();
   };
 
-  const { refetch } = useGetAllUsers();
+  // const { refetch } = useGetAllUsers();
 
-  useEffect(() => {
-    refetch();
-  }, [onSubmit]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [onSubmit]); cannot do this, it cause Infinite fetch because function always change, if put onSubmit into callback wont trigger anymore
 
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => {
-        navigate(`/user-profile/${userId}`);
-      }, 2000); // 2s
-    }
-  }, [isSuccess, navigate]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setTimeout(() => {
+  //       navigate(`/user-profile/${userId}`);
+  //     }, 2000); // 2s
+  //   }
+  // }, [isSuccess, navigate]);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const handleFileChange = (event: any) => {
