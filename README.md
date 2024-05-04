@@ -68,6 +68,29 @@ The common solution to this problem is to initiate the data request after the co
 
 ---：How to find the correct event to update during checkout
 
+---：  const onSubmit = async (formDataJson: AccountFromData) => {
+    const formData = new FormData();
+    const isAdminBoolean = formDataJson.isAdmin === "Yes";
+    formData.append("userName", formDataJson.userName);
+    formData.append("password", formDataJson.password);
+    formData.append("firstName", formDataJson.firstName);
+    formData.append("lastName", formDataJson.lastName);
+    formData.append("position", formDataJson.position);
+    formData.append("hourlyWage", formDataJson.hourlyWage.toString());
+    formData.append("isAdmin", isAdminBoolean.toString());
+    if (formDataJson.imageFile && formDataJson.imageFile.length > 0) {
+      const imageFile = formDataJson.imageFile[0];
+      formData.append("imageFile", imageFile);
+    }
+    onSave(formData);
+  };
+
+  const { refetch } = useGetAllUsers();
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [onSubmit]); cannot do this, it cause Infinite fetch because function always change, if put onSubmit into callback wont trigger anymore 
+
 
  
 
