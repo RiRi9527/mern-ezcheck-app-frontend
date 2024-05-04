@@ -18,7 +18,11 @@ const EventDialog: React.FC<EventDialogProps> = ({
   return (
     <Dialog open={isEventDialogOpen} onOpenChange={closeEventDialog}>
       <DialogContent>
-        <EventFrom event={selectedEvent} userId={userId} />
+        <EventFrom
+          event={selectedEvent}
+          userId={userId}
+          closeEventDialog={closeEventDialog}
+        />
       </DialogContent>
     </Dialog>
   );

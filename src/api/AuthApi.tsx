@@ -84,12 +84,17 @@ export const useGetAllUsers = () => {
     }
     return response.json();
   };
-  const { data: users, isError } = useQuery("getAllUsers", getAllUsersRequest, {
+  const {
+    data: users,
+    isError,
+    refetch,
+  } = useQuery("getAllUsers", getAllUsersRequest, {
     retry: false,
   });
 
   return {
     users,
     isError,
+    refetch,
   };
 };

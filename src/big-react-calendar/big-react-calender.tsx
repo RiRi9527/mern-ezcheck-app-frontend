@@ -3,7 +3,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { EventData } from "@/types";
 import { useGetEvents } from "@/api/EventApi";
 
@@ -16,16 +16,26 @@ interface MyCalendarProps {
 }
 
 const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
-  const {
-    events,
+  const { events, refetch: refetchEvents } = useGetEvents(userId);
 
-    refetch: refetchEvents,
-  } = useGetEvents(userId);
-
-  // Refetch the events data whenever the userId changes
   useEffect(() => {
     refetchEvents();
   }, [userId, refetchEvents]);
+
+  // "Because setCalendarEvents(events) doesn't immediately update the value of calendarEvents.
+  // The value of events may have changed before setCalendarEvents(events) is executed.";
+
+  // Refetch the events data whenever the userId changes
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await refetchEvents();
+  //     if (events) {
+  //       setCalenderEvents(events);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [userId, refetchEvents, events]); --- due to "Infinite fetch
 
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
@@ -34,28 +44,57 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
     setIsEventDialogOpen(false);
   };
 
-  const handleEventSelect = (event: any) => {
-    setIsEventDialogOpen(true);
-    let SelectedEvent: EventData = {
-      _id: event._id,
-      title: event.title,
-      startTime: event.start.toString(),
-      endTime: event.end.toString(),
-    };
-    setSelectedEvent(SelectedEvent);
-  };
+  // const handleEventSelect = (event: any) => {
+  //   setIsEventDialogOpen(true);
+  //   let SelectedEvent: EventData = {
+  //     _id: event._id,
+  //     title: event.title,
+  //     startTime: event.start.toString(),
+  //     endTime: event.end.toString(),
+  //   };
+  //   setSelectedEvent(SelectedEvent);
+  // };
 
-  const handleSlotSelect = (event: any) => {
-    // console.log("Selected slot:", event.start, event.end);
-    setIsEventDialogOpen(true);
-    let SelectedEvent: EventData = {
-      _id: event._id,
-      title: event.title,
-      startTime: event.start.toString(),
-      endTime: event.end.toString(),
-    };
-    setSelectedEvent(SelectedEvent);
-  };
+  const handleEventSelect = useCallback(
+    (event: any) => {
+      setIsEventDialogOpen(true);
+      let SelectedEvent: EventData = {
+        _id: event._id,
+        title: event.title,
+        startTime: event.start.toString(),
+        endTime: event.end.toString(),
+      };
+      setSelectedEvent(SelectedEvent);
+    },
+    [setIsEventDialogOpen, setSelectedEvent]
+  );
+
+  // const handleSlotSelect = (event: any) => {
+  //   // console.log("Selected slot:", event.start, event.end);
+  //   setIsEventDialogOpen(true);
+  //   let SelectedEvent: EventData = {
+  //     _id: event._id,
+  //     title: event.title,
+  //     startTime: event.start.toString(),
+  //     endTime: event.end.toString(),
+  //   };
+  //   setSelectedEvent(SelectedEvent);
+  // };
+
+  const handleSlotSelect = useCallback(
+    (event: any) => {
+      // console.log("Selected slot:", event.start, event.end);
+      setIsEventDialogOpen(true);
+      let SelectedEvent: EventData = {
+        _id: event._id,
+        title: event.title,
+        startTime: event.start.toString(),
+        endTime: event.end.toString(),
+      };
+      setSelectedEvent(SelectedEvent);
+    },
+    [setIsEventDialogOpen, setSelectedEvent]
+  );
 
   const generateWorkHours = () => {
     const startOfWeek = moment().startOf("week"); // Start date of the week
@@ -81,52 +120,101 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
 
     return workHours;
   };
-  const backgroundEvents = generateWorkHours();
+  // const backgroundEvents = generateWorkHours();
+  const backgroundEvents = useMemo(() => generateWorkHours(), []);
 
-  const eventStyleGetter = (
-    event: any,
-    start: Date,
-    end: Date
-    // isSelected: boolean
-  ) => {
-    if (event.title === "Lunch Break") {
-      const time = end.getTime() - start.getTime();
-      if (time <= 30 * 60 * 1000) {
-        return {
-          style: {
-            backgroundColor: "rgba(0, 255, 0, 0.7)", // Green color with 30% opacity
-          },
-        };
-      }
-      if (time > 30 * 60 * 1000) {
-        return {
-          style: {
-            backgroundColor: "rgba(255, 0, 0, 0.3)", // Red color with 30% opacity
-          },
-        };
-      }
-    }
+  // const eventStyleGetter = (
+  //   event: any,
+  //   start: Date,
+  //   end: Date
+  //   // isSelected: boolean
+  // ) => {
+  //   if (event.title === "Lunch Break") {
+  //     const time = end.getTime() - start.getTime();
+  //     if (time <= 30 * 60 * 1000) {
+  //       return {
+  //         style: {
+  //           backgroundColor: "rgba(0, 255, 0, 0.7)", // Green color with 30% opacity
+  //         },
+  //       };
+  //     }
+  //     if (time > 30 * 60 * 1000) {
+  //       return {
+  //         style: {
+  //           backgroundColor: "rgba(255, 0, 0, 0.3)", // Red color with 30% opacity
+  //         },
+  //       };
+  //     }
+  //   }
 
-    if (event.title === "Actual Time") {
-      const time = end.getTime() - start.getTime();
-      if (time >= 8 * 1000 * 60 * 60) {
-        return {
-          style: {
-            backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
-          },
-        };
-      }
-      if (time < 7.83 * 1000 * 60 * 60) {
-        return {
-          style: {
-            backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
-          },
-        };
-      }
-    }
+  //   if (event.title === "Actual Time") {
+  //     const time = end.getTime() - start.getTime();
+  //     if (time >= 8 * 1000 * 60 * 60) {
+  //       return {
+  //         style: {
+  //           backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
+  //         },
+  //       };
+  //     }
+  //     if (time < 7.83 * 1000 * 60 * 60) {
+  //       return {
+  //         style: {
+  //           backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
+  //         },
+  //       };
+  //     }
+  //   }
 
-    return {};
-  };
+  //   return {};
+  // };
+
+  const eventStyleGetter = useCallback(
+    (
+      event: any,
+      start: Date,
+      end: Date
+      // isSelected: boolean
+    ) => {
+      if (event.title === "Lunch Break") {
+        const time = end.getTime() - start.getTime();
+        if (time <= 30 * 60 * 1000) {
+          return {
+            style: {
+              backgroundColor: "rgba(0, 255, 0, 0.7)", // Green color with 30% opacity
+            },
+          };
+        }
+        if (time > 30 * 60 * 1000) {
+          return {
+            style: {
+              backgroundColor: "rgba(255, 0, 0, 0.3)", // Red color with 30% opacity
+            },
+          };
+        }
+      }
+
+      if (event.title === "Actual Time") {
+        const time = end.getTime() - start.getTime();
+        if (time >= 8 * 1000 * 60 * 60) {
+          return {
+            style: {
+              backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
+            },
+          };
+        }
+        if (time < 7.83 * 1000 * 60 * 60) {
+          return {
+            style: {
+              backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
+            },
+          };
+        }
+      }
+
+      return {};
+    },
+    []
+  );
 
   return (
     <>
@@ -165,25 +253,25 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
 };
 export default MyCalendar;
 
-const myEventsList = [
-  {
-    title: "Actual Time",
-    start: new Date(2024, 3, 22, 9, 0), // April 17, 2024, 9:00 AM
-    end: new Date(2024, 3, 22, 17, 15), // April 17, 2024, 5:15 PM
-  },
-  {
-    title: "Lunch Break",
-    start: new Date(2024, 3, 22, 12, 0), // April 17, 2024, 12:00 PM
-    end: new Date(2024, 3, 22, 12, 28), // April 17, 2024, 1:00 PM
-  },
-  {
-    title: "Actual Time",
-    start: new Date(2024, 3, 23, 9, 0), // April 17, 2024, 9:00 AM
-    end: new Date(2024, 3, 23, 16, 49), // April 17, 2024, 5:15 PM
-  },
-  {
-    title: "Lunch Break",
-    start: new Date(2024, 3, 23, 12, 0), // April 17, 2024, 12:00 PM
-    end: new Date(2024, 3, 23, 12, 31), // April 17, 2024, 1:00 PM
-  },
-];
+// const myEventsList = [
+//   {
+//     title: "Actual Time",
+//     start: new Date(2024, 3, 22, 9, 0), // April 17, 2024, 9:00 AM
+//     end: new Date(2024, 3, 22, 17, 15), // April 17, 2024, 5:15 PM
+//   },
+//   {
+//     title: "Lunch Break",
+//     start: new Date(2024, 3, 22, 12, 0), // April 17, 2024, 12:00 PM
+//     end: new Date(2024, 3, 22, 12, 28), // April 17, 2024, 1:00 PM
+//   },
+//   {
+//     title: "Actual Time",
+//     start: new Date(2024, 3, 23, 9, 0), // April 17, 2024, 9:00 AM
+//     end: new Date(2024, 3, 23, 16, 49), // April 17, 2024, 5:15 PM
+//   },
+//   {
+//     title: "Lunch Break",
+//     start: new Date(2024, 3, 23, 12, 0), // April 17, 2024, 12:00 PM
+//     end: new Date(2024, 3, 23, 12, 31), // April 17, 2024, 1:00 PM
+//   },
+// ];

@@ -77,3 +77,77 @@ export const useCreateEvent = (userId?: string) => {
 
   return { createEvent, isLoading, isSuccess, eventId };
 };
+
+export const useEditEvent = (userId?: string) => {
+  const editEventRequest = async (eventData: EventData): Promise<string> => {
+    const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(eventData),
+      //   credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to edit event");
+    }
+    return response.json();
+  };
+  const {
+    mutateAsync: editEvent,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+    data: eventId,
+  } = useMutation(editEventRequest);
+
+  if (isSuccess) {
+    toast.success("Event edited!");
+    reset();
+  }
+
+  if (error) {
+    toast.error("Unable to edit Event");
+    reset();
+  }
+
+  return { editEvent, isLoading, isSuccess, eventId };
+};
+
+export const useDeleteEvent = (userId?: string) => {
+  const deleteEventRequest = async (eventId: string): Promise<string> => {
+    const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+      body: JSON.stringify({ eventId }),
+      //   credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete event");
+    }
+    return response.json();
+  };
+  const {
+    mutateAsync: deleteEvent,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+    data: eventId,
+  } = useMutation(deleteEventRequest);
+
+  if (isSuccess) {
+    toast.success("Event delete!");
+    reset();
+  }
+
+  if (error) {
+    toast.error("Unable to edit Event");
+    reset();
+  }
+
+  return { deleteEvent, isLoading, isSuccess, eventId };
+};

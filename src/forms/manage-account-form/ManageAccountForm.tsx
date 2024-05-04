@@ -1,3 +1,4 @@
+import { useGetAllUsers } from "@/api/AuthApi";
 import { useAppContext } from "@/content/AppContext";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
@@ -32,7 +33,6 @@ const ManageAccountForm = ({
   account,
 }: Props) => {
   const navigate = useNavigate();
-
   const { auth } = useAppContext();
   const disable =
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
@@ -70,6 +70,12 @@ const ManageAccountForm = ({
     }
     onSave(formData);
   };
+
+  const { refetch } = useGetAllUsers();
+
+  useEffect(() => {
+    refetch();
+  }, [onSubmit]);
 
   useEffect(() => {
     if (isSuccess) {
