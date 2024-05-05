@@ -1,6 +1,6 @@
 import { useGetAccount, useUpdateAccount } from "@/api/AccountApi";
 import { useGetAllUsers } from "@/api/AuthApi";
-import { useCreateEvent } from "@/api/EventApi";
+import { useCreateCheckIn } from "@/api/EventApi";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
 import MainUsersNav, { NavListUser } from "@/components/MainUsersNav";
 import MobileUsersNav from "@/components/MobileUsersNav";
@@ -53,7 +53,8 @@ const UserProfileAdminPage = () => {
 
   // check in
 
-  const { createEvent } = useCreateEvent(userId);
+  // const { createEvent } = useCreateEvent(userId);
+  const { createCheckInEvent } = useCreateCheckIn(userId);
 
   const handleCheckIn = () => {
     const eventData = {
@@ -61,7 +62,7 @@ const UserProfileAdminPage = () => {
       startTime: new Date().toString(),
     };
 
-    createEvent(eventData);
+    createCheckInEvent(eventData);
   };
 
   // Display an error message if there is an error fetching the user data

@@ -36,12 +36,6 @@ export const useGetEvents = (userId?: string) => {
 
     const formattedEventData = eventData.map((event: any) => {
       switch (true) {
-        case !event.endTime || !event.startTime:
-          return {
-            ...event,
-            start: new Date(event.startTime || event.endTime || ""),
-            end: new Date(event.startTime || event.endTime || ""), // 如果没有结束时间，开始和结束时间相同
-          };
         case !event.endTime && event.title === "Actual Time":
           const start = new Date(event.startTime);
           const end = new Date();
@@ -49,6 +43,12 @@ export const useGetEvents = (userId?: string) => {
             ...event,
             start,
             end,
+          };
+        case !event.endTime || !event.startTime:
+          return {
+            ...event,
+            start: new Date(event.startTime || event.endTime || ""),
+            end: new Date(event.startTime || event.endTime || ""), // 如果没有结束时间，开始和结束时间相同
           };
         default:
           return {
@@ -194,7 +194,9 @@ export const useDeleteEvent = (userId?: string) => {
 };
 
 export const useCreateCheckIn = (userId?: string) => {
-  const createEventRequest = async (eventData: EventData): Promise<string> => {
+  const createCheckInEventRequest = async (
+    eventData: EventData
+  ): Promise<any> => {
     const response = await fetch(
       `${API_BASE_URL}/api/events/${userId}/checkIn`,
       {
@@ -207,28 +209,27 @@ export const useCreateCheckIn = (userId?: string) => {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to create event");
+      throw new Error("Failed to check in");
     }
     return response.json();
   };
   const {
-    mutateAsync: createEvent,
+    mutateAsync: createCheckInEvent,
     isLoading,
     isSuccess,
     error,
     reset,
-    data: eventId,
-  } = useMutation(createEventRequest);
+  } = useMutation(createCheckInEventRequest);
 
   if (isSuccess) {
-    toast.success("Event created!");
+    toast.success("Check in successful");
     reset();
   }
 
   if (error) {
-    toast.error("Unable to create Event");
+    toast.error("Failed to check in");
     reset();
   }
 
-  return { createEvent, isLoading, isSuccess, eventId };
+  return { createCheckInEvent, isLoading, isSuccess };
 };
