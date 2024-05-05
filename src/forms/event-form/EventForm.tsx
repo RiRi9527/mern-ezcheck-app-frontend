@@ -43,13 +43,17 @@ const EventFrom = ({ event, userId, closeEventDialog }: Props) => {
     setTimeout(() => {
       closeEventDialog();
       refetch();
-    }, 500); // 1000 milliseconds delay
+    }, 500); // 500 milliseconds delay
   };
 
   const handleDelete = async () => {
     if (event?._id) {
       deleteEvent(event._id);
     }
+    setTimeout(() => {
+      closeEventDialog();
+      refetch();
+    }, 500); // 500 milliseconds delay
   };
 
   return (

@@ -53,12 +53,11 @@ const UserProfileAdminPage = () => {
 
   // check in
 
-  const { createEvent, isLoading: isCreateEventLoading } =
-    useCreateEvent(userId);
+  const { createEvent } = useCreateEvent(userId);
 
   const handleCheckIn = () => {
     const eventData = {
-      title: "Work Hours",
+      title: "Actual Time",
       startTime: new Date().toString(),
     };
 
@@ -73,10 +72,6 @@ const UserProfileAdminPage = () => {
   // Display a loading message while data is being fetched
   if (isGetLoading) {
     return <span>Loading...</span>;
-  }
-
-  if (isCreateEventLoading) {
-    return <span>Event creating...</span>;
   }
 
   return (
