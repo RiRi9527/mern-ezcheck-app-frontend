@@ -208,9 +208,11 @@ export const useCreateCheckIn = (userId?: string) => {
         //   credentials: "include",
       }
     );
+
     if (!response.ok) {
       throw new Error("Failed to check in");
     }
+
     return response.json();
   };
   const {
@@ -232,4 +234,45 @@ export const useCreateCheckIn = (userId?: string) => {
   }
 
   return { createCheckInEvent, isLoading, isSuccess };
+};
+
+export const useCreateCheckOut = (userId?: string) => {
+  const createCheckOutEventRequest = async (
+    eventData: EventData
+  ): Promise<any> => {
+    const response = await fetch(
+      `${API_BASE_URL}/api/events/${userId}/checkOut`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(eventData),
+        //   credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to check out");
+    }
+    return response.json();
+  };
+  const {
+    mutateAsync: createCheckOutEvent,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+  } = useMutation(createCheckOutEventRequest);
+
+  if (isSuccess) {
+    toast.success("Check out successful");
+    reset();
+  }
+
+  if (error) {
+    toast.error("Failed to check out");
+    reset();
+  }
+
+  return { createCheckOutEvent, isLoading, isSuccess };
 };

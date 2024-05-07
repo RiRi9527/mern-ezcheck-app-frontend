@@ -1,6 +1,10 @@
 import { useGetAccount, useUpdateAccount } from "@/api/AccountApi";
 import { useGetAllUsers } from "@/api/AuthApi";
-import { useCreateCheckIn } from "@/api/EventApi";
+import {
+  useCreateCheckIn,
+  useCreateCheckOut,
+  useGetEvents,
+} from "@/api/EventApi";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
 import MainUsersNav, { NavListUser } from "@/components/MainUsersNav";
 import MobileUsersNav from "@/components/MobileUsersNav";
@@ -55,14 +59,28 @@ const UserProfileAdminPage = () => {
 
   // const { createEvent } = useCreateEvent(userId);
   const { createCheckInEvent } = useCreateCheckIn(userId);
+  const { createCheckOutEvent } = useCreateCheckOut(userId);
 
-  const handleCheckIn = () => {
+  const { refetch: refetchEvents } = useGetEvents(userId);
+
+  const handleCheckIn = async () => {
     const eventData = {
       title: "Actual Time",
       startTime: new Date().toString(),
     };
 
-    createCheckInEvent(eventData);
+    await createCheckInEvent(eventData);
+    refetchEvents();
+  };
+
+  const handleCheckOut = async () => {
+    const eventData = {
+      title: "Actual Time",
+      endTime: new Date().toString(),
+    };
+
+    await createCheckOutEvent(eventData);
+    refetchEvents();
   };
 
   // Display an error message if there is an error fetching the user data
@@ -92,7 +110,7 @@ const UserProfileAdminPage = () => {
           <div className="md:order-1">
             <div className="flex flex-col space-y-2">
               <Button onClick={handleCheckIn}>Check in</Button>
-              <Button>Check out</Button>
+              <Button onClick={handleCheckOut}>Check out</Button>
               <Button>Lunch</Button>
             </div>
           </div>
