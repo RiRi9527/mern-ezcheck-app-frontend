@@ -1,3 +1,6 @@
+import MobileNav from "@/components/MobileNav";
+import { Settings } from "lucide-react";
+
 const MainPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
@@ -21,7 +24,14 @@ const MainPage = () => {
         </div>
       </div>
       <div className="flex flex-row w-full flex-1">
-        <div className="w-9 bg-gray-700 ">left</div>
+        <div className="w-10 bg-gray-700 flex flex-col items-center  ">
+          <div className="w-full border-b border-gray-500 flex justify-center mt-1 py-2">
+            <MobileNav />
+          </div>
+          <div className="w-full border-b border-gray-500 flex justify-center py-2">
+            <Settings color="white" />
+          </div>
+        </div>
         <div className="flex-1 bg-red-500">right</div>
       </div>
       <div className="h-3 bg-gray-700"></div>
