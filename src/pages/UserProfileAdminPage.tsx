@@ -33,6 +33,7 @@ const UserProfileAdminPage = () => {
   // Hooks for updating account and fetching account details
   const { isLoading: isUpdateLoading, updateAccount } =
     useUpdateAccount(userId);
+
   const {
     user,
     isLoading: isGetLoading,
