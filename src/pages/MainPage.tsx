@@ -4,6 +4,7 @@ import { UserRoundSearch } from "lucide-react";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "../../public/Logo.jpg";
+import MyCalendar from "@/big-react-calendar/big-react-calender";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -80,7 +81,9 @@ const MainPage = () => {
             <SettingNav />
           </div>
         </div>
-        <div className="flex-1">right</div>
+        <div className="flex-1">
+          <MyCalendar userId="66189e4543997636a271e175" />
+        </div>
       </div>
       <div className="h-3 bg-gray-700"></div>
     </div>
