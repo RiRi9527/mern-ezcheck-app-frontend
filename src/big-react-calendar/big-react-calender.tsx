@@ -218,7 +218,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
 
   return (
     <>
-      <div className="myCustomHeight" style={{ height: 600 }}>
+      <div className="myCustomHeight h-[520px] ">
         <Calendar
           // dayLayoutAlgorithm="no-overlap"
           localizer={localizer}

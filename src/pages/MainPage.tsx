@@ -82,7 +82,15 @@ const MainPage = () => {
           </div>
         </div>
         <div className="flex-1">
-          <MyCalendar userId="66189e4543997636a271e175" />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[260px] m-5">
+            <div className="sm:col-span-2 bg-red-500">0</div>
+            <div className=" bg-red-500">1</div>
+            <div className=" bg-red-500">2</div>
+            <div className="sm:row-span-2 bg-red-500">3</div>
+            <div className="sm:col-span-3 row-span-2">
+              <MyCalendar userId="66189e4543997636a271e175" />
+            </div>
+          </div>
         </div>
       </div>
       <div className="h-3 bg-gray-700"></div>
