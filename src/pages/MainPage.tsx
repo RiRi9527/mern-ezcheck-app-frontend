@@ -3,8 +3,9 @@ import UserInfoNav from "@/components/UserInfoNav";
 import { UserRoundSearch } from "lucide-react";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "../../public/Logo.jpg";
+import logo from "/Logo.jpg";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
+import Adds from "@/components/Adds";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -82,12 +83,14 @@ const MainPage = () => {
           </div>
         </div>
         <div className="flex-1">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[260px] m-5">
-            <div className="sm:col-span-2 bg-red-500">0</div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 auto-rows-[260px] m-1">
+            <div className=" sm:col-span-2 ">
+              <Adds />
+            </div>
             <div className=" bg-red-500">1</div>
             <div className=" bg-red-500">2</div>
             <div className="sm:row-span-2 bg-red-500">3</div>
-            <div className="sm:col-span-3 row-span-2">
+            <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
               <MyCalendar userId="66189e4543997636a271e175" />
             </div>
           </div>
