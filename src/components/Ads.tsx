@@ -1,4 +1,11 @@
-import logo from "/Logo.jpg";
+import {
+  Card,
+  //   CardContent,
+  //   CardDescription,
+  //   CardFooter,
+  //   CardHeader,
+  //   CardTitle,
+} from "@/components/ui/card";
 
 import {
   Carousel,
@@ -8,15 +15,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const Adds = () => {
+const Ads = () => {
   return (
     <Carousel className="flex justify-center items-center">
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (
           <CarouselItem key={index}>
-            <div className="flex justify-center items-center h-[260px] ">
-              <img src={logo} alt="Logo" className="h-full object-cover" />
-            </div>
+            <Card className="flex justify-center items-center h-[260px] ">
+              <h1>Hello World!</h1>
+            </Card>
           </CarouselItem>
         ))}
       </CarouselContent>
@@ -26,4 +33,4 @@ const Adds = () => {
   );
 };
 
-export default Adds;
+export default Ads;
