@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import logo from "/Logo.jpg";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
 import Adds from "@/components/Adds";
+import EmployeeCard from "@/components/EmployeeCard";
+import CheckInfo from "@/components/CheckInfo";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -87,9 +89,13 @@ const MainPage = () => {
             <div className=" sm:col-span-2 ">
               <Adds />
             </div>
-            <div className=" bg-red-500">1</div>
-            <div className=" bg-red-500">2</div>
-            <div className="sm:row-span-2 bg-red-500">3</div>
+            <div>
+              <EmployeeCard />
+            </div>
+            <div className="">
+              <CheckInfo />
+            </div>
+            <div className="sm:row-span-2 bg-red-500">all employee info</div>
             <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
               <MyCalendar userId="66189e4543997636a271e175" />
             </div>
