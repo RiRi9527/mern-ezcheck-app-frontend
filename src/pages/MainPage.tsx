@@ -8,12 +8,15 @@ import MyCalendar from "@/big-react-calendar/big-react-calender";
 import Ads from "@/components/Ads";
 import EmployeeCard from "@/components/EmployeeCard";
 import CheckInfo from "@/components/CheckInfo";
-import EmployeeList from "@/components/EmployeeList";
+import EmployeeList, { NavListUser } from "@/components/EmployeeList";
+import { useAppContext } from "@/content/AppContext";
+import { toast } from "sonner";
+import { useGetAccount } from "@/api/AccountApi";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [prevWidth, setPrevWidth] = useState(window.innerWidth);
-
+  // control sidebar open
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
@@ -39,7 +42,42 @@ const MainPage = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [prevWidth]); // useEffect depends on prevWidth
+  }, [prevWidth]);
+  // useEffect depends on prevWidth
+
+  const { auth } = useAppContext();
+  const disable =
+    auth?.position !== "CEO" && auth?.position !== "Office Manager";
+
+  // auth check
+
+  const [userId, setUserId] = useState(auth?._id);
+
+  useEffect(() => {
+    if (auth?._id) {
+      setUserId(auth._id);
+    }
+  }, [auth]); // to make sure we have user in initial render
+
+  const handleUserSwitchClick = (user: NavListUser) => {
+    if (disable) {
+      return;
+    }
+
+    setUserId(user._id);
+    toast.success("User Switched!");
+  };
+
+  const {
+    user,
+    isLoading: isGetLoading,
+    isError,
+    refetch: refetchUser,
+  } = useGetAccount(userId);
+
+  if (isError) {
+    return <>Error fetching user data (404 Not Found)</>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -79,7 +117,7 @@ const MainPage = () => {
           }`}
         >
           <div className="w-full h-9">
-            <UserInfoNav />
+            <UserInfoNav user={user} />
           </div>
           <div className="w-full h-9">
             <SettingNav />
@@ -91,13 +129,16 @@ const MainPage = () => {
               <Ads />
             </div>
             <div>
-              <EmployeeCard />
+              <EmployeeCard user={user} isLoading={isGetLoading} />
             </div>
             <div className="">
               <CheckInfo />
             </div>
-            <div className="sm:row-span-2 ">
-              <EmployeeList />
+            <div className="sm:row-span-2  ">
+              <EmployeeList
+                handleClick={handleUserSwitchClick}
+                refetch={refetchUser}
+              />
             </div>
             <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
               <MyCalendar userId="66189e4543997636a271e175" />

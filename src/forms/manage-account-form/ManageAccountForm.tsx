@@ -1,3 +1,4 @@
+import { useGetAccount } from "@/api/AccountApi";
 import { useGetAllUsers } from "@/api/AuthApi";
 import { useAppContext } from "@/content/AppContext";
 import { User } from "@/types";
@@ -24,14 +25,7 @@ type Props = {
   userId?: string;
 };
 
-const ManageAccountForm = ({
-  onSave,
-  isLoading,
-  // isSuccess,
-  // userId,
-  account,
-}: Props) => {
-  // const navigate = useNavigate();
+const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
   const { auth } = useAppContext();
   const disable =
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
@@ -53,7 +47,8 @@ const ManageAccountForm = ({
 
   const existingImageUrls = watch("imageUrl");
 
-  const { refetch } = useGetAllUsers();
+  const { refetch: refetchAllUsers } = useGetAllUsers();
+  const { refetch: refetchUser } = useGetAccount(account?._id);
 
   const onSubmit = async (formDataJson: AccountFromData) => {
     const formData = new FormData();
@@ -70,22 +65,9 @@ const ManageAccountForm = ({
       formData.append("imageFile", imageFile);
     }
     await onSave(formData);
-    refetch();
+    refetchAllUsers();
+    refetchUser();
   };
-
-  // const { refetch } = useGetAllUsers();
-
-  // useEffect(() => {
-  //   refetch();
-  // }, [onSubmit]); cannot do this, it cause Infinite fetch because function always change, if put onSubmit into callback wont trigger anymore
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setTimeout(() => {
-  //       navigate(`/user-profile/${userId}`);
-  //     }, 2000); // 2s
-  //   }
-  // }, [isSuccess, navigate]);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const handleFileChange = (event: any) => {
@@ -94,17 +76,14 @@ const ManageAccountForm = ({
   };
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="text-3xl font-bold">
-        {account ? "Update" : "Create"} Account
-      </h2>
-      <div className="flex flex-cols-2">
-        <div className="grid pr-4 flex-1">
-          <div className={`relative group`}>
+    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col">
+        <div className="mb-2">
+          <div className="relative group flex  justify-center items-center">
             {existingImageUrls && !selectedFile && (
               <img
                 src={existingImageUrls}
-                className="min-h-full object-cover"
+                className="h-36 rounded-md"
                 alt="Existing Image"
               />
             )}
@@ -113,7 +92,7 @@ const ManageAccountForm = ({
               <img
                 src={URL.createObjectURL(selectedFile)}
                 alt="Selected File"
-                className="min-h-full object-cover"
+                className="h-36 rounded-md"
               />
             )}
             <button
@@ -151,126 +130,123 @@ const ManageAccountForm = ({
           )}
         </label>
       </div>
-      <div className="flex flex-col md:flex-row gap-5">
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          First Name
-          <input
-            disabled={disable}
-            type="text"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("firstName", { required: "This field is required" })}
-          />
-          {errors.firstName && (
-            <span className="text-red-500">{errors.firstName.message}</span>
-          )}
-        </label>
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          Last Name
-          <input
-            disabled={disable}
-            type="text"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("lastName", { required: "This field is required" })}
-          />
-          {errors.lastName && (
-            <span className="text-red-500">{errors.lastName.message}</span>
-          )}
-        </label>
-      </div>
-      <div className="flex flex-col md:flex-row gap-5">
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          Position
-          <select
-            disabled={disable}
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("position", { required: "This field is required" })}
-            defaultValue="Customer Service"
-          >
-            <option value="Customer Service">
-              Customer Service Representative
+
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        First Name
+        <input
+          disabled={disable}
+          type="text"
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("firstName", { required: "This field is required" })}
+        />
+        {errors.firstName && (
+          <span className="text-red-500">{errors.firstName.message}</span>
+        )}
+      </label>
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        Last Name
+        <input
+          disabled={disable}
+          type="text"
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("lastName", { required: "This field is required" })}
+        />
+        {errors.lastName && (
+          <span className="text-red-500">{errors.lastName.message}</span>
+        )}
+      </label>
+
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        Position
+        <select
+          disabled={disable}
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("position", { required: "This field is required" })}
+          defaultValue="Customer Service"
+        >
+          <option value="Customer Service">
+            Customer Service Representative
+          </option>
+          <option value="Office Manager">Office Manager</option>
+          <option value="Office Supervisor">Office Supervisor</option>
+          <option value="CEO">CEO</option>
+        </select>
+        {errors.position && (
+          <span className="text-red-500">{errors.position.message}</span>
+        )}
+      </label>
+
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        hourlyWage($)
+        <select
+          disabled={disable}
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("hourlyWage", { required: "This field is required" })}
+          defaultValue="19"
+        >
+          {[...Array(12).keys()].map((value) => (
+            <option key={value + 19} value={value + 19}>
+              {value + 19}
             </option>
-            <option value="Office Manager">Office Manager</option>
-            <option value="Office Supervisor">Office Supervisor</option>
-            <option value="CEO">CEO</option>
-          </select>
-          {errors.position && (
-            <span className="text-red-500">{errors.position.message}</span>
-          )}
-        </label>
+          ))}
+        </select>
+        {errors.hourlyWage && (
+          <span className="text-red-500">{errors.hourlyWage.message}</span>
+        )}
+      </label>
 
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          hourlyWage($)
-          <select
-            disabled={disable}
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("hourlyWage", { required: "This field is required" })}
-            defaultValue="19"
-          >
-            {[...Array(12).keys()].map((value) => (
-              <option key={value + 19} value={value + 19}>
-                {value + 19}
-              </option>
-            ))}
-          </select>
-          {errors.hourlyWage && (
-            <span className="text-red-500">{errors.hourlyWage.message}</span>
-          )}
-        </label>
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        isAdmin
+        <select
+          disabled={disable}
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("isAdmin", { required: "This field is required" })}
+          defaultValue="No"
+        >
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+        {errors.isAdmin && (
+          <span className="text-red-500">{errors.isAdmin.message}</span>
+        )}
+      </label>
 
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          isAdmin
-          <select
-            disabled={disable}
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("isAdmin", { required: "This field is required" })}
-            defaultValue="No"
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-          {errors.isAdmin && (
-            <span className="text-red-500">{errors.isAdmin.message}</span>
-          )}
-        </label>
-      </div>
-      <div className="flex flex-col md:flex-row gap-5">
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          userName
-          <input
-            disabled={disable}
-            type="text"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("userName", { required: "This field is required" })}
-          />
-          {errors.userName && (
-            <span className="text-red-500">{errors.userName.message}</span>
-          )}
-        </label>
-        <label className="text-gray-700 text-sm font-bold flex-1">
-          password
-          <input
-            disabled={disable}
-            type="text"
-            className="border rounded w-full py-1 px-2 font-normal"
-            {...register("password", { required: "This field is required" })}
-          />
-          {errors.password && (
-            <span className="text-red-500">{errors.password.message}</span>
-          )}
-        </label>
-      </div>
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        userName
+        <input
+          disabled={disable}
+          type="text"
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("userName", { required: "This field is required" })}
+        />
+        {errors.userName && (
+          <span className="text-red-500">{errors.userName.message}</span>
+        )}
+      </label>
+      <label className="text-gray-700 text-sm font-bold flex-1">
+        password
+        <input
+          disabled={disable}
+          type="text"
+          className="border rounded w-full py-1 px-2 font-normal"
+          {...register("password", { required: "This field is required" })}
+        />
+        {errors.password && (
+          <span className="text-red-500">{errors.password.message}</span>
+        )}
+      </label>
       <span>
         {isLoading ? (
-          <button className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl">
+          <button className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl w-full rounded-md mt-2">
             Loading
           </button>
         ) : (
           <button
             disabled={disable}
             type="submit"
-            className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl"
+            className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl w-full rounded-md mt-2"
           >
-            Submit
+            {account ? "Update" : "Create"}
           </button>
         )}
       </span>

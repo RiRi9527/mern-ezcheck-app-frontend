@@ -1,8 +1,19 @@
+import { useUpdateAccount } from "@/api/AccountApi";
+import ManageAccountForm from "@/forms/manage-account-form/ManageAccountForm";
+import { User } from "@/types";
 import { PersonStanding } from "lucide-react";
 
 import { useState } from "react";
 
-const UserInfoNav = () => {
+type Props = {
+  user?: User;
+};
+
+const UserInfoNav = ({ user }: Props) => {
+  const { isLoading: isUpdateLoading, updateAccount } = useUpdateAccount(
+    user?._id
+  );
+
   const [show, setShow] = useState(false);
 
   return (
@@ -15,8 +26,12 @@ const UserInfoNav = () => {
         <PersonStanding className="text-white" />
       </div>
       {show && (
-        <div className="absolute top-0 left-10 h-full w-[300px] bg-gray-800 z-10">
-          show
+        <div className="absolute top-0 left-10 h-full w-[300px] bg-gray-800 z-10 p-4">
+          <ManageAccountForm
+            account={user}
+            onSave={updateAccount}
+            isLoading={isUpdateLoading}
+          />
         </div>
       )}
     </div>

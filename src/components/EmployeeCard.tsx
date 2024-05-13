@@ -1,4 +1,4 @@
-import logo from "/Logo.jpg";
+import { User } from "@/types";
 import {
   Card,
   CardContent,
@@ -8,7 +8,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const EmployeeCard = () => {
+type Props = {
+  user?: User;
+  isLoading: boolean;
+};
+
+const EmployeeCard = ({ user, isLoading }: Props) => {
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
   return (
     <Card className="h-full w-full flex flex-col justify-center items-center">
       <CardHeader>
@@ -18,12 +27,12 @@ const EmployeeCard = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <img src={logo} alt="Logo" className="h-20  object-cover" />
+        <img src={user?.imageUrl} alt="Logo" className="h-20  object-cover" />
       </CardContent>
       <CardFooter className="flex flex-col">
-        <p>Hao Zhou</p>
+        <p>{`${user?.firstName} ${user?.lastName}`}</p>
         <CardDescription className="self-center">
-          Customer Service Representative
+          {user?.position}
         </CardDescription>
       </CardFooter>
     </Card>

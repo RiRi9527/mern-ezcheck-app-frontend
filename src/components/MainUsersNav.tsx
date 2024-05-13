@@ -14,7 +14,6 @@ export type NavListUser = {
 const MainUsersNav = ({ users, handleClick }: Props) => {
   return (
     <>
-      <RegisterDialog />
       {users.map((user: NavListUser) => (
         <div
           key={user._id}
@@ -29,6 +28,7 @@ const MainUsersNav = ({ users, handleClick }: Props) => {
           <h1 className="text-xl">{user.firstName}</h1>
         </div>
       ))}
+      <RegisterDialog />
     </>
   );
 };
