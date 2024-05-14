@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "./ui/button";
 
 type Props = {
   user?: User;
@@ -19,7 +20,7 @@ const EmployeeCard = ({ user, isLoading }: Props) => {
   }
 
   return (
-    <Card className="h-full w-full flex flex-col justify-center items-center">
+    <Card className=" relative h-full w-full flex flex-col justify-center items-center">
       <CardHeader>
         <CardTitle>Employee Info.</CardTitle>
         <CardDescription className="self-center">
@@ -35,6 +36,12 @@ const EmployeeCard = ({ user, isLoading }: Props) => {
           {user?.position}
         </CardDescription>
       </CardFooter>
+      <Button
+        variant="ghost"
+        className="absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-green-300"
+      >
+        Edit
+      </Button>
     </Card>
   );
 };

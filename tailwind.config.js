@@ -10,7 +10,8 @@ module.exports = {
   prefix: "",
   theme: {
     fontFamily: {
-      sans: ['"Jacquard 12", "system-ui"'],
+      sans: ['"Dancing Script", "cursive"'],
+      // DancingScript: ['"Dancing Script", "cursive"'],
     },
     container: {
       center: true,
