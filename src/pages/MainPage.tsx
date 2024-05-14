@@ -1,7 +1,6 @@
 import SettingNav from "@/components/SettingNav";
 import UserInfoNav from "@/components/UserInfoNav";
-import { UserRoundSearch } from "lucide-react";
-import { Menu } from "lucide-react";
+import { UserRoundSearch, Menu, ContactRound, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "/Logo.jpg";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
@@ -12,6 +11,7 @@ import EmployeeList, { NavListUser } from "@/components/EmployeeList";
 import { useAppContext } from "@/content/AppContext";
 import { toast } from "sonner";
 import { useGetAccount } from "@/api/AccountApi";
+import EmployeeInfoRightBar from "@/components/EmployeeInfoRightBar";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,6 +59,9 @@ const MainPage = () => {
     }
   }, [auth]); // to make sure we have user in initial render
 
+  const [openEmployeeInfoRightBar, setOpenEmployeeInfoRightBar] =
+    useState(false);
+
   const handleUserSwitchClick = (user: NavListUser) => {
     if (disable) {
       return;
@@ -80,7 +83,7 @@ const MainPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
       <div className="bg-gray-700 h-11 flex justify-between">
         <div className="flex flex-row w-1/2 space-x-2">
           <div
@@ -101,11 +104,22 @@ const MainPage = () => {
             <UserRoundSearch className="text-white hover:cursor-pointer" />
           </div>
         </div>
-        <div className="flex items-center">
-          <div className="bg-blue-900 rounded-full w-9 h-9 flex justify-center items-center">
+        <div className="flex items-center space-x-2 pr-2">
+          <div className="bg-blue-900 rounded-full w-9 h-9 flex justify-center items-center mr-4">
             <h1 className="text-white font-bold">HZ</h1>
           </div>
-          <div className="flex w-10 justify-center items-center text-white md:hidden">
+          <div
+            className="w-auto h-11 flex justify-center items-center"
+            onClick={() =>
+              setOpenEmployeeInfoRightBar(!openEmployeeInfoRightBar)
+            }
+          >
+            <ContactRound
+              className="text-white hover:cursor-pointer"
+              size={30}
+            />
+          </div>
+          <div className="flex h-11 w-auto justify-center items-center text-white md:hidden ">
             <UserRoundSearch />
           </div>
         </div>
@@ -117,33 +131,54 @@ const MainPage = () => {
           }`}
         >
           <div className="w-full h-9">
-            <UserInfoNav user={user} />
+            <UserInfoNav />
           </div>
           <div className="w-full h-9">
             <SettingNav />
           </div>
         </div>
-        <div className="flex-1">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 auto-rows-[260px] m-1">
-            <div className=" sm:col-span-2 ">
-              <Ads />
-            </div>
-            <div>
-              <EmployeeCard user={user} isLoading={isGetLoading} />
-            </div>
-            <div className="">
-              <CheckInfo />
-            </div>
-            <div className="sm:row-span-2  ">
-              <EmployeeList
-                handleClick={handleUserSwitchClick}
-                refetch={refetchUser}
-              />
-            </div>
-            <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
-              <MyCalendar userId="66189e4543997636a271e175" />
+        <div className="flex-1 flex justify-center bg-gray-200">
+          <div className=" pt-4 w-full max-w-[2200px]">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 auto-rows-[260px] m-1">
+              <div className=" sm:col-span-2 ">
+                <Ads />
+              </div>
+              <div>
+                <EmployeeCard user={user} isLoading={isGetLoading} />
+              </div>
+              <div className="">
+                <CheckInfo />
+              </div>
+              <div className="sm:row-span-2  ">
+                <EmployeeList
+                  handleClick={handleUserSwitchClick}
+                  refetch={refetchUser}
+                />
+              </div>
+              <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
+                <MyCalendar userId="66189e4543997636a271e175" />
+              </div>
             </div>
           </div>
+          {openEmployeeInfoRightBar && (
+            <div className=" absolute right-0 top-0 w-[400px] h-full flex flex-col z-50 bg-gray-200 border-l-2 border-b-8  border-gray-700">
+              <div className="w-full h-8 bg-gray-700 flex justify-between px-2 items-center">
+                <span className=" text-white text-xs">Employee Info.</span>
+                <span>
+                  <button
+                    className="text-white"
+                    onClick={() => setOpenEmployeeInfoRightBar(false)}
+                  >
+                    <X size={20} />
+                  </button>
+                </span>
+              </div>
+
+              <div className="p-4 ">
+                <EmployeeInfoRightBar user={user} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="h-3 bg-gray-700"></div>

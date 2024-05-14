@@ -34,7 +34,7 @@ const EmployeeList = ({ handleClick, refetch }: Props) => {
   return (
     <Card className="h-full w-full flex flex-col overflow-auto">
       <h1>online:</h1>
-      <div className="p-2 grid grid-cols-5 sm:grid-cols-3  gap-3">
+      <div className="p-2 grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {users?.map((user: NavListUser) => (
           <div
             className="flex justify-center items-center hover:cursor-pointer"
@@ -42,7 +42,7 @@ const EmployeeList = ({ handleClick, refetch }: Props) => {
             onClick={() => handleClickAndRefetch(user)}
           >
             <div
-              className="min-w-16 max-w-16 h-16 rounded-full bg-green-300 flex justify-center items-center bg-cover bg-center text-white border-2 border-green-500 overflow-hidden"
+              className="w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center text-white border-2 border-green-500 overflow-hidden"
               style={{
                 backgroundImage: `url(${user.imageUrl})`,
               }}
@@ -73,7 +73,7 @@ const EmployeeList = ({ handleClick, refetch }: Props) => {
       </div>
       <Separator className="mt-4 border"></Separator>
       <h1>offline:</h1>
-      <div className="p-2 grid grid-cols-5 sm:grid-cols-3  gap-3">
+      <div className="p-2 grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {users?.map((user: NavListUser) => (
           <div
             className="flex justify-center items-center hover:cursor-pointer"
@@ -81,7 +81,7 @@ const EmployeeList = ({ handleClick, refetch }: Props) => {
             onClick={() => handleClickAndRefetch(user)}
           >
             <div
-              className="min-w-16 max-w-16 h-16 rounded-full bg-green-300 flex justify-center items-center bg-cover bg-center border-2 border-gray-500 overflow-hidden"
+              className="w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center border-2 border-gray-500 overflow-hidden"
               style={{
                 backgroundImage: `url(${user.imageUrl})`,
               }}

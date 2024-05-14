@@ -1,7 +1,7 @@
-.rbc-header {
+/* .rbc-header {
   background: blue;
   color: white;
-}
+} */
 
 div[role="button"][title*="Actual Time"] {
   display: flex;
