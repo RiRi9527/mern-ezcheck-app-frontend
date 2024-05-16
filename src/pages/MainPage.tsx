@@ -1,5 +1,5 @@
 import SettingNav from "@/components/SettingNav";
-import UserInfoNav from "@/components/UserInfoNav";
+import UserInfoNav, { NavListUser } from "@/components/UserInfoNav";
 import { UserRoundSearch, Menu, ContactRound, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "/Logo.jpg";
@@ -7,7 +7,7 @@ import MyCalendar from "@/big-react-calendar/big-react-calender";
 import Ads from "@/components/Ads";
 import EmployeeCard from "@/components/EmployeeCard";
 import CheckInfo from "@/components/CheckInfo";
-import EmployeeList, { NavListUser } from "@/components/EmployeeList";
+import WorkSchedule from "@/components/WorkSchedule";
 import { useAppContext } from "@/content/AppContext";
 import { toast } from "sonner";
 import { useGetAccount } from "@/api/AccountApi";
@@ -131,7 +131,10 @@ const MainPage = () => {
           }`}
         >
           <div className="w-full h-9">
-            <UserInfoNav />
+            <UserInfoNav
+              handleClick={handleUserSwitchClick}
+              refetch={refetchUser}
+            />
           </div>
           <div className="w-full h-9">
             <SettingNav />
@@ -150,10 +153,7 @@ const MainPage = () => {
                 <CheckInfo />
               </div>
               <div className="sm:row-span-2  ">
-                <EmployeeList
-                  handleClick={handleUserSwitchClick}
-                  refetch={refetchUser}
-                />
+                <WorkSchedule />
               </div>
               <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
                 <MyCalendar userId="66189e4543997636a271e175" />
