@@ -62,6 +62,10 @@ const MainPage = () => {
   const [openEmployeeInfoRightBar, setOpenEmployeeInfoRightBar] =
     useState(false);
 
+  const handleOpenEmployeeInfoRightBar = () => {
+    setOpenEmployeeInfoRightBar(!openEmployeeInfoRightBar);
+  };
+
   const handleUserSwitchClick = (user: NavListUser) => {
     if (disable) {
       return;
@@ -110,9 +114,7 @@ const MainPage = () => {
           </div>
           <div
             className="w-auto h-11 flex justify-center items-center"
-            onClick={() =>
-              setOpenEmployeeInfoRightBar(!openEmployeeInfoRightBar)
-            }
+            onClick={handleOpenEmployeeInfoRightBar}
           >
             <ContactRound
               className="text-white hover:cursor-pointer"
@@ -147,12 +149,18 @@ const MainPage = () => {
                 <Ads />
               </div>
               <div>
-                <EmployeeCard user={user} isLoading={isGetLoading} />
+                <EmployeeCard
+                  user={user}
+                  isLoading={isGetLoading}
+                  handleOpenEmployeeInfoRightBar={
+                    handleOpenEmployeeInfoRightBar
+                  }
+                />
               </div>
               <div className="">
                 <CheckInfo />
               </div>
-              <div className="sm:row-span-2  ">
+              <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
                 <WorkSchedule />
               </div>
               <div className="sm:col-span-3 2xl:col-span-4 row-span-2">

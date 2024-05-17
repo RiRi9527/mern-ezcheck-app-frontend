@@ -66,6 +66,16 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  /* Remove Arrow on Input type Number with Tailwind CSS */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield !important;
+  }
+  /* Remove Arrow on Input type Number with Tailwind CSS */
 }
 
 @layer base {

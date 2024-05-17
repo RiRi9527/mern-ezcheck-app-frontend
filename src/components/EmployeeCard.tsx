@@ -12,9 +12,14 @@ import { Button } from "./ui/button";
 type Props = {
   user?: User;
   isLoading: boolean;
+  handleOpenEmployeeInfoRightBar: () => void;
 };
 
-const EmployeeCard = ({ user, isLoading }: Props) => {
+const EmployeeCard = ({
+  user,
+  isLoading,
+  handleOpenEmployeeInfoRightBar,
+}: Props) => {
   if (isLoading) {
     return <div>Loading</div>;
   }
@@ -28,7 +33,7 @@ const EmployeeCard = ({ user, isLoading }: Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <img src={user?.imageUrl} alt="Logo" className="h-20  object-cover" />
+        <img src={user?.imageUrl} className="h-20  object-cover" />
       </CardContent>
       <CardFooter className="flex flex-col">
         <p>{`${user?.firstName} ${user?.lastName}`}</p>
@@ -39,6 +44,7 @@ const EmployeeCard = ({ user, isLoading }: Props) => {
       <Button
         variant="ghost"
         className="absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-green-300"
+        onClick={handleOpenEmployeeInfoRightBar}
       >
         Edit
       </Button>

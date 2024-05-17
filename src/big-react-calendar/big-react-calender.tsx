@@ -227,7 +227,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ userId }) => {
           endAccessor="end"
           min={new Date(0, 0, 0, 8)} // Set calendar start time to 8:00 AM
           max={new Date(0, 0, 0, 23)} // Set calendar end time to 8:00 PM
-          defaultView="work_week"
+          defaultView="week"
           views={{
             month: true,
             week: true,
