@@ -133,7 +133,7 @@ const MainPage = () => {
                 <CheckInfo />
               </div>
               <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
-                <WorkSchedule currentUserSchedule={user?.schedule} />
+                <WorkSchedule user={user} />
               </div>
               <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
                 <MyCalendar userId={userId} />

@@ -8,7 +8,17 @@ export type User = {
   hourlyWage: number;
   isAdmin: boolean;
   imageUrl: string;
-  schedule: object;
+  schedule: UserSchedule;
+};
+
+export type UserSchedule = {
+  monday?: { checkIn: string; checkOut: string };
+  tuesday?: { checkIn: string; checkOut: string };
+  wednesday?: { checkIn: string; checkOut: string };
+  thursday?: { checkIn: string; checkOut: string };
+  friday?: { checkIn: string; checkOut: string };
+  saturday?: { checkIn: string; checkOut: string };
+  sunday?: { checkIn: string; checkOut: string };
 };
 
 export type EventData = {

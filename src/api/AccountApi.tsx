@@ -1,4 +1,4 @@
-import { User } from "@/types";
+import { User, UserSchedule } from "@/types";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
@@ -99,4 +99,46 @@ export const useUpdateAccount = (userId?: string) => {
   }
 
   return { isLoading, updateAccount, isSuccess };
+};
+
+export const useUpdateSchedule = (userId?: string) => {
+  const updateScheduleRequest = async (
+    scheduleFormData: UserSchedule
+  ): Promise<User> => {
+    const response = await fetch(
+      `${API_BASE_URL}/api/users/${userId}/schedule`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(scheduleFormData),
+        credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to update account");
+    }
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateSchedule,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+  } = useMutation(updateScheduleRequest);
+
+  if (isSuccess) {
+    toast.success("Schedule updated!");
+    reset();
+  }
+
+  if (error) {
+    toast.error("Unable to update schedule");
+    reset();
+  }
+
+  return { isLoading, updateSchedule, isSuccess };
 };
