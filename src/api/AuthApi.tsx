@@ -1,4 +1,3 @@
-import { NavListUser } from "@/components/MainUsersNav";
 import { LoginFormData } from "@/forms/login-form/LoginForm";
 import { User } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -58,10 +57,10 @@ export const useLogin = () => {
     error,
     reset,
   } = useMutation(loginRequest, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries("validateToken");
       toast.success("User login!");
-      navigate(`/user-profile/${data}`);
+      navigate(`/main`);
     },
   });
 
@@ -74,7 +73,7 @@ export const useLogin = () => {
 };
 
 export const useGetAllUsers = () => {
-  const getAllUsersRequest = async (): Promise<NavListUser[]> => {
+  const getAllUsersRequest = async () => {
     const response = await fetch(`${API_BASE_URL}/api/auth/users`, {
       credentials: "include",
     });

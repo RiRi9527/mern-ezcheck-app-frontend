@@ -57,9 +57,9 @@ const EventFrom = ({ event, userId, closeEventDialog }: Props) => {
   };
 
   return (
-    <div className="relative">
+    <div>
       <button
-        className="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 font-bold rounded"
+        className="absolute top-1 left-1 bg-red-600 text-white px-2 py-1 font-bold rounded"
         onClick={handleDelete}
       >
         Delete

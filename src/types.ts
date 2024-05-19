@@ -8,6 +8,7 @@ export type User = {
   hourlyWage: number;
   isAdmin: boolean;
   imageUrl: string;
+  schedule: object;
 };
 
 export type EventData = {

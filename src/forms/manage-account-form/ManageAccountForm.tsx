@@ -12,7 +12,6 @@ export type AccountFromData = {
   lastName: string;
   position: string;
   hourlyWage: number;
-  isAdmin: string;
   imageFile?: FileList; // for somehow, even use File here, still return a [] FileList
   imageUrl: string;
 };
@@ -40,8 +39,7 @@ const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
 
   useEffect(() => {
     if (account) {
-      const isAdminString = account.isAdmin ? "Yes" : "No";
-      reset({ ...account, isAdmin: isAdminString });
+      reset(account);
     }
   }, [account, reset]);
 
@@ -52,14 +50,12 @@ const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
 
   const onSubmit = async (formDataJson: AccountFromData) => {
     const formData = new FormData();
-    const isAdminBoolean = formDataJson.isAdmin === "Yes";
     formData.append("userName", formDataJson.userName);
     formData.append("password", formDataJson.password);
     formData.append("firstName", formDataJson.firstName);
     formData.append("lastName", formDataJson.lastName);
     formData.append("position", formDataJson.position);
     formData.append("hourlyWage", formDataJson.hourlyWage.toString());
-    formData.append("isAdmin", isAdminBoolean.toString());
     if (formDataJson.imageFile && formDataJson.imageFile.length > 0) {
       const imageFile = formDataJson.imageFile[0];
       formData.append("imageFile", imageFile);
@@ -192,22 +188,6 @@ const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
         </select>
         {errors.hourlyWage && (
           <span className="text-red-500">{errors.hourlyWage.message}</span>
-        )}
-      </label>
-
-      <label className="text-gray-700 text-sm font-bold flex-1">
-        isAdmin
-        <select
-          disabled={disable}
-          className="border rounded w-full py-1 px-2 font-normal"
-          {...register("isAdmin", { required: "This field is required" })}
-          defaultValue="No"
-        >
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-        {errors.isAdmin && (
-          <span className="text-red-500">{errors.isAdmin.message}</span>
         )}
       </label>
 

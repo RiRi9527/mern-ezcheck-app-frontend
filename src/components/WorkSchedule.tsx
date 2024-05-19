@@ -1,36 +1,44 @@
 import { Card } from "@/components/ui/card";
 import { ChevronUp } from "lucide-react";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Schedule = {
   [key: string]: {
-    start: string;
-    end: string;
+    checkIn: string;
+    checkOut: string;
   };
 };
 
 type Editing = {
   day: string | null;
-  type: "start" | "end" | null;
+  type: "checkIn" | "checkOut" | null;
 };
 
 const initialSchedule = {
-  Mon: { start: "09:00", end: "17:00" },
-  Tue: { start: "09:00", end: "17:00" },
-  Wed: { start: "09:00", end: "17:00" },
-  Thu: { start: "09:00", end: "17:00" },
-  Fri: { start: "09:00", end: "17:00" },
-  Sat: { start: "10:00", end: "14:00" }, // Example different times for the weekend
-  Sun: { start: "10:00", end: "14:00" },
+  Mon: { checkIn: "09:00", checkOut: "17:00" },
+  Tue: { checkIn: "09:00", checkOut: "17:00" },
+  Wed: { checkIn: "09:00", checkOut: "17:00" },
+  Thu: { checkIn: "09:00", checkOut: "17:00" },
+  Fri: { checkIn: "09:00", checkOut: "17:00" },
+  Sat: { checkIn: "10:00", checkOut: "14:00" }, // Example different times for the weekend
+  Sun: { checkIn: "10:00", checkOut: "14:00" },
 };
-const WorkSchedule = () => {
+
+const WorkSchedule = ({ currentUserSchedule }: any) => {
   const [schedule, setSchedule] = useState<Schedule>(initialSchedule);
+
+  useEffect(() => {
+    if (currentUserSchedule) {
+      setSchedule(currentUserSchedule);
+    }
+  }, [currentUserSchedule]);
+
   const [editing, setEditing] = useState<Editing>({ day: null, type: null });
 
   const handleInputChange = (
     day: string,
-    type: "start" | "end",
+    type: "checkIn" | "checkOut",
     value: string
   ) => {
     setSchedule((prev) => ({
@@ -42,7 +50,7 @@ const WorkSchedule = () => {
     }));
   };
 
-  const renderTimeInput = (day: string, type: "start" | "end") => {
+  const renderTimeInput = (day: string, type: "checkIn" | "checkOut") => {
     return editing.day === day && editing.type === type ? (
       <span className="flex justify-center relative">
         <input
@@ -79,8 +87,8 @@ const WorkSchedule = () => {
             className=" bg-slate-300 w-full rounded-lg grid grid-cols-4"
           >
             <span className="flex justify-center">{day}</span>
-            {renderTimeInput(day, "start")}
-            {renderTimeInput(day, "end")}
+            {renderTimeInput(day, "checkIn")}
+            {renderTimeInput(day, "checkOut")}
             <span className="flex justify-center">Disable</span>
           </div>
         ))}

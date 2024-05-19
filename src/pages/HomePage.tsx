@@ -1,20 +1,9 @@
 import LoginFrom from "@/forms/login-form/LoginForm";
 import { useLogin } from "@/api/AuthApi";
 import { Link } from "react-router-dom";
-import { useAppContext } from "@/content/AppContext";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const HomePage = () => {
   const { userLogin, isLoading } = useLogin();
-  const { auth } = useAppContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (auth) {
-      navigate(`/user-profile/${auth._id}`);
-    }
-  }, [auth, navigate]);
 
   return (
     <div className="container mx-auto py-10 flex flex-col justify-center items-center min-h-screen">
