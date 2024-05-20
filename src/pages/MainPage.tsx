@@ -21,35 +21,35 @@ const MainPage = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const [prevWidth, setPrevWidth] = useState(window.innerWidth);
-  // control sidebar open
-  useEffect(() => {
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
+  // const [prevWidth, setPrevWidth] = useState(window.innerWidth);
+  // // control sidebar open
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const screenWidth = window.innerWidth;
 
-      // Control menu visibility based on screen width
-      if (prevWidth >= 768 && screenWidth < 768) {
-        setIsMenuOpen(false); // Hide menu when screen width decreases below 768
-      } else if (prevWidth < 768 && screenWidth >= 768) {
-        setIsMenuOpen(true); // Show menu when screen width increases to 768 or above
-      }
+  //     // Control menu visibility based on screen width
+  //     if (prevWidth >= 768 && screenWidth < 768) {
+  //       setIsMenuOpen(false); // Hide menu when screen width decreases below 768
+  //     } else if (prevWidth < 768 && screenWidth >= 768) {
+  //       setIsMenuOpen(true); // Show menu when screen width increases to 768 or above
+  //     }
 
-      // Update prevWidth
-      setPrevWidth(screenWidth);
-    };
+  //     // Update prevWidth
+  //     setPrevWidth(screenWidth);
+  //   };
 
-    // Run once on component load
-    handleResize();
+  //   // Run once on component load
+  //   handleResize();
 
-    // Listen for window resize
-    window.addEventListener("resize", handleResize);
+  //   // Listen for window resize
+  //   window.addEventListener("resize", handleResize);
 
-    // Clean up event listener
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [prevWidth]);
-  // useEffect depends on prevWidth
+  //   // Clean up event listener
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, [prevWidth]);
+  // // useEffect depends on prevWidth
 
   const { auth } = useAppContext();
   const disable =
@@ -133,10 +133,10 @@ const MainPage = () => {
                 <CheckInfo />
               </div>
               <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
-                <WorkSchedule user={user} />
+                <WorkSchedule user={user} refetch={refetchUser} />
               </div>
               <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
-                <MyCalendar userId={userId} />
+                <MyCalendar user={user} />
               </div>
             </div>
           </div>

@@ -3,13 +3,13 @@
   color: white;
 } */
 
-div[role="button"][title*="Actual Time"] {
+div[role="button"][title*="Working Time"] {
   display: flex;
   flex-direction: column-reverse;
   /* opacity: 0.5; */
 }
 
-div[role="button"][title*="Actual Time"] .rbc-event-content {
+div[role="button"][title*="Working Time"] .rbc-event-content {
   display: flex;
   flex-direction: column-reverse;
 }

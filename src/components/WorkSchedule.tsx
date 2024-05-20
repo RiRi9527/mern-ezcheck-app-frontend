@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { UserSchedule, User } from "@/types";
 import { useUpdateSchedule } from "@/api/AccountApi";
+import { Separator } from "./ui/separator";
 
 type Props = {
   user: User | undefined;
+  refetch: () => void;
 };
 
 type Editing = {
@@ -51,11 +53,19 @@ const initialSchedule = {
   Sat: { checkIn: "10:00", checkOut: "14:00", disable: true },
 };
 
-const WorkSchedule = ({ user }: Props) => {
+const WorkSchedule = ({ user, refetch }: Props) => {
   const [schedule, setSchedule] = useState<Schedule>(initialSchedule);
 
   useEffect(() => {
-    let updateSchedule = { ...initialSchedule };
+    let updateSchedule = {
+      Sun: { checkIn: "10:00", checkOut: "14:00", disable: true },
+      Mon: { checkIn: "09:00", checkOut: "17:00", disable: true },
+      Tue: { checkIn: "09:00", checkOut: "17:00", disable: true },
+      Wed: { checkIn: "09:00", checkOut: "17:00", disable: true },
+      Thu: { checkIn: "09:00", checkOut: "17:00", disable: true },
+      Fri: { checkIn: "09:00", checkOut: "17:00", disable: true },
+      Sat: { checkIn: "10:00", checkOut: "14:00", disable: true },
+    };
     const daysMap: { [key: string]: keyof DayScheduleOne } = {
       monday: "Mon",
       tuesday: "Tue",
@@ -80,7 +90,7 @@ const WorkSchedule = ({ user }: Props) => {
     }
 
     setSchedule(updateSchedule);
-  }, [user?.schedule]);
+  }, [user]);
 
   const { updateSchedule, isLoading } = useUpdateSchedule(user?._id);
 
@@ -162,6 +172,7 @@ const WorkSchedule = ({ user }: Props) => {
     );
 
     await updateSchedule(formSchedule);
+    refetch();
   };
   return (
     <Card className="h-full w-full flex flex-col items-center justify-center px-4 overflow-y-auto">
@@ -195,7 +206,9 @@ const WorkSchedule = ({ user }: Props) => {
               )}
             </span>
             {schedule[day].disable && (
-              <div className="absolute inset-0 bg-black opacity-40 rounded-full "></div>
+              <div className="absolute inset-0 bg-black opacity-40 rounded-full flex items-center ">
+                <Separator />
+              </div>
             )}
           </div>
         ))}

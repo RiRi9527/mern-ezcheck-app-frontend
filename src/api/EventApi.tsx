@@ -36,7 +36,7 @@ export const useGetEvents = (userId?: string) => {
 
     const formattedEventData = eventData.map((event: any) => {
       switch (true) {
-        case !event.endTime && event.title === "Actual Time":
+        case !event.endTime && event.title === "Working Time":
           const start = new Date(event.startTime);
           const end = new Date();
           return {
