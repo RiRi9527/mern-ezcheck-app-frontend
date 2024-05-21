@@ -13,6 +13,7 @@ import { useGetAccount } from "@/api/AccountApi";
 import EmployeeInfoRightBar from "@/components/EmployeeInfoRightBar";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import UserCreateDialog from "@/components/UserCreateDialog";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,35 +22,22 @@ const MainPage = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // const [prevWidth, setPrevWidth] = useState(window.innerWidth);
-  // // control sidebar open
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     const screenWidth = window.innerWidth;
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 1024) {
+        setIsMenuOpen(false);
+      }
+    };
 
-  //     // Control menu visibility based on screen width
-  //     if (prevWidth >= 768 && screenWidth < 768) {
-  //       setIsMenuOpen(false); // Hide menu when screen width decreases below 768
-  //     } else if (prevWidth < 768 && screenWidth >= 768) {
-  //       setIsMenuOpen(true); // Show menu when screen width increases to 768 or above
-  //     }
+    // Listen for window resize
+    window.addEventListener("resize", handleResize);
 
-  //     // Update prevWidth
-  //     setPrevWidth(screenWidth);
-  //   };
-
-  //   // Run once on component load
-  //   handleResize();
-
-  //   // Listen for window resize
-  //   window.addEventListener("resize", handleResize);
-
-  //   // Clean up event listener
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, [prevWidth]);
-  // // useEffect depends on prevWidth
+    // Clean up event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const { auth } = useAppContext();
   const disable =
@@ -58,6 +46,11 @@ const MainPage = () => {
   // auth check
 
   const [userId, setUserId] = useState(auth?._id);
+
+  const [isUserCreateDialog, setIsUserCreateDialog] = useState(false);
+  const handleUserCreateDialog = () => {
+    setIsUserCreateDialog(!isUserCreateDialog);
+  };
 
   useEffect(() => {
     if (auth?._id) {
@@ -108,6 +101,7 @@ const MainPage = () => {
             <UserInfoNav
               handleClick={handleUserSwitchClick}
               refetch={refetchUser}
+              handleUserCreateDialog={handleUserCreateDialog}
             />
           </div>
           <div className="w-full h-9">
@@ -161,6 +155,10 @@ const MainPage = () => {
           </div>
         )}
       </div>
+      <UserCreateDialog
+        isUserCreateDialog={isUserCreateDialog}
+        handleUserCreateDialog={handleUserCreateDialog}
+      />
       <Footer />
     </div>
   );

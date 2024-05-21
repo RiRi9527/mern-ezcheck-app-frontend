@@ -1,15 +1,13 @@
 import { PersonStanding } from "lucide-react";
 import { useGetAllUsers } from "@/api/AuthApi";
 import { Separator } from "@radix-ui/react-separator";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { useCreateAccount } from "@/api/AccountApi";
-import ManageAccountForm from "@/forms/manage-account-form/ManageAccountForm";
 
 import { useState } from "react";
 
 type Props = {
   handleClick: (user: any) => void;
   refetch: () => void;
+  handleUserCreateDialog: () => void;
 };
 
 export type NavListUser = {
@@ -18,17 +16,14 @@ export type NavListUser = {
   imageUrl: string;
 };
 
-const UserInfoNav = ({ handleClick, refetch }: Props) => {
+const UserInfoNav = ({
+  handleClick,
+  refetch,
+  handleUserCreateDialog,
+}: Props) => {
   const [show, setShow] = useState(false);
 
-  const { users } = useGetAllUsers();
-
-  const {
-    createAccount,
-    isLoading: isCreateLoading,
-    isSuccess,
-    userId,
-  } = useCreateAccount();
+  const { users, refetch: refetchAllUsers } = useGetAllUsers();
 
   const handleClickAndRefetch = async (user: any) => {
     await handleClick(user);
@@ -65,27 +60,14 @@ const UserInfoNav = ({ handleClick, refetch }: Props) => {
                     <h1> {user.firstName}</h1>
                   </div>
                 ))}
-                <Dialog>
-                  <DialogTrigger>
-                    <div className="flex flex-col items-center hover:cursor-pointer">
-                      <div className="min-w-12 h-12 rounded-full flex items-center justify-center bg-gray-200">
-                        <div className="text-2xl font-bold text-gray-700">
-                          +
-                        </div>
-                      </div>
-                    </div>
-                  </DialogTrigger>
-                  <DialogContent className=" max-h-screen overflow-y-scroll">
-                    <div className="md:order-2">
-                      <ManageAccountForm
-                        onSave={createAccount}
-                        isLoading={isCreateLoading}
-                        isSuccess={isSuccess}
-                        userId={userId}
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <div
+                  className="flex flex-col items-center justify-center hover:cursor-pointer"
+                  onClick={handleUserCreateDialog}
+                >
+                  <div className="min-w-12 h-12 rounded-full flex items-center justify-center bg-gray-200">
+                    <div className="text-2xl font-bold text-gray-700">+</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -110,27 +92,14 @@ const UserInfoNav = ({ handleClick, refetch }: Props) => {
                     <h1>{user.firstName}</h1>
                   </div>
                 ))}
-                <Dialog>
-                  <DialogTrigger>
-                    <div className="flex flex-col items-center hover:cursor-pointer">
-                      <div className="min-w-12 h-12 rounded-full flex items-center justify-center bg-gray-200">
-                        <div className="text-2xl font-bold text-gray-700">
-                          +
-                        </div>
-                      </div>
-                    </div>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <div className="md:order-2">
-                      <ManageAccountForm
-                        onSave={createAccount}
-                        isLoading={isCreateLoading}
-                        isSuccess={isSuccess}
-                        userId={userId}
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <div
+                  className="flex flex-col items-center justify-center hover:cursor-pointer"
+                  onClick={handleUserCreateDialog}
+                >
+                  <div className="min-w-12 h-12 rounded-full flex items-center justify-center bg-gray-200">
+                    <div className="text-2xl font-bold text-gray-700">+</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

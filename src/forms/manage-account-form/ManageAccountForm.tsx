@@ -1,5 +1,3 @@
-import { useGetAccount } from "@/api/AccountApi";
-import { useGetAllUsers } from "@/api/AuthApi";
 import { useAppContext } from "@/content/AppContext";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
@@ -21,7 +19,6 @@ type Props = {
   onSave: (accountFormData: FormData) => void;
   isLoading: boolean;
   isSuccess?: boolean;
-  userId?: string;
 };
 
 const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
@@ -45,9 +42,6 @@ const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
 
   const existingImageUrls = watch("imageUrl");
 
-  const { refetch: refetchAllUsers } = useGetAllUsers();
-  const { refetch: refetchUser } = useGetAccount(account?._id);
-
   const onSubmit = async (formDataJson: AccountFromData) => {
     const formData = new FormData();
     formData.append("userName", formDataJson.userName);
@@ -60,9 +54,7 @@ const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
       const imageFile = formDataJson.imageFile[0];
       formData.append("imageFile", imageFile);
     }
-    await onSave(formData);
-    refetchAllUsers();
-    refetchUser();
+    onSave(formData);
   };
 
   const [selectedFile, setSelectedFile] = useState(null);
