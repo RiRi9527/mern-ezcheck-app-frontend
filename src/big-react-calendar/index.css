@@ -2,14 +2,26 @@
   background: blue;
   color: white;
 } */
-
+/* 
 div[role="button"][title*="Working Time"] {
   display: flex;
   flex-direction: column-reverse;
-  /* opacity: 0.5; */
+  opacity: 0.5;
 }
 
 div[role="button"][title*="Working Time"] .rbc-event-content {
+  display: flex;
+  flex-direction: column-reverse;
+} */
+
+.rbc-background-event {
+  opacity: 0.3 !important;
+  display: flex !important;
+  justify-content: center !important;
+  flex-direction: column-reverse !important;
+}
+
+.rbc-background-event .rbc-event-content {
   display: flex;
   flex-direction: column-reverse;
 }

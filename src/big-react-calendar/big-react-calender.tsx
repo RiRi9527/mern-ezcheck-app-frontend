@@ -3,7 +3,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { EventData, User } from "@/types";
 import { useGetEvents } from "@/api/EventApi";
 
@@ -17,8 +17,17 @@ const MyCalendar = ({ user }: Props) => {
   const { events, refetch: refetchEvents } = useGetEvents(user?._id);
 
   useEffect(() => {
-    refetchEvents();
-  }, [user, refetchEvents]);
+    if (user) {
+      refetchEvents();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.schedule) {
+      const workHours = generateWorkHours(user.schedule);
+      setBackgroundEvents(workHours);
+    }
+  }, [user]);
 
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
@@ -30,40 +39,6 @@ const MyCalendar = ({ user }: Props) => {
       allDay: boolean;
     }[]
   >([]);
-
-  const closeEventDialog = () => {
-    setIsEventDialogOpen(false);
-  };
-
-  const handleEventSelect = useCallback(
-    (event: any) => {
-      setIsEventDialogOpen(true);
-      let SelectedEvent: EventData = {
-        _id: event._id,
-        title: event.title,
-        startTime: event.start.toString(),
-        endTime: event.end.toString(),
-      };
-      setSelectedEvent(SelectedEvent);
-    },
-    [setIsEventDialogOpen, setSelectedEvent]
-  );
-
-  const handleSlotSelect = useCallback(
-    (event: any) => {
-      // console.log("Selected slot:", event.start, event.end);
-      setIsEventDialogOpen(true);
-      let SelectedEvent: EventData = {
-        _id: event._id,
-        title: event.title,
-        startTime: event.start.toString(),
-        endTime: event.end.toString(),
-      };
-      setSelectedEvent(SelectedEvent);
-    },
-    [setIsEventDialogOpen, setSelectedEvent]
-  );
-
   const generateWorkHours = (initialSchedule: any) => {
     const startOfWeek = moment().startOf("week"); // Start date of the week
     const endOfWeek = moment().endOf("week"); // End date of the week
@@ -103,12 +78,38 @@ const MyCalendar = ({ user }: Props) => {
     return workHours;
   };
 
-  useEffect(() => {
-    if (user?.schedule) {
-      const workHours = generateWorkHours(user.schedule);
-      setBackgroundEvents(workHours);
-    }
-  }, [user]);
+  const closeEventDialog = () => {
+    setIsEventDialogOpen(false);
+  };
+
+  const handleEventSelect = useCallback(
+    (event: any) => {
+      setIsEventDialogOpen(true);
+      let SelectedEvent: EventData = {
+        _id: event._id,
+        title: event.title,
+        startTime: event.start.toString(),
+        endTime: event.end.toString(),
+      };
+      setSelectedEvent(SelectedEvent);
+    },
+    [setIsEventDialogOpen, setSelectedEvent]
+  );
+
+  const handleSlotSelect = useCallback(
+    (event: any) => {
+      // console.log("Selected slot:", event.start, event.end);
+      setIsEventDialogOpen(true);
+      let SelectedEvent: EventData = {
+        _id: event._id,
+        title: event.title,
+        startTime: event.start.toString(),
+        endTime: event.end.toString(),
+      };
+      setSelectedEvent(SelectedEvent);
+    },
+    [setIsEventDialogOpen, setSelectedEvent]
+  );
 
   const eventStyleGetter = useCallback(
     (
