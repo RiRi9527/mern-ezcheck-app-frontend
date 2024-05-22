@@ -1,5 +1,6 @@
 import { User, UserSchedule } from "@/types";
 import { useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -29,6 +30,7 @@ export const useGetAccount = (userId?: string) => {
 };
 
 export const useCreateAccount = () => {
+  const navigate = useNavigate();
   const createAccountRequest = async (
     accountFormData: FormData
   ): Promise<string> => {
@@ -50,12 +52,17 @@ export const useCreateAccount = () => {
     error,
     reset,
     data: userId,
-  } = useMutation(createAccountRequest);
+  } = useMutation(createAccountRequest, {
+    onSuccess: async (data) => {
+      toast.success("User created!");
+      navigate(`/transfer/${data}`);
+    },
+  });
 
-  if (isSuccess) {
-    toast.success("User created!");
-    reset();
-  }
+  // if (isSuccess) {
+  //   toast.success("User created!");
+  //   reset();
+  // }
 
   if (error) {
     toast.error("Unable to create user");

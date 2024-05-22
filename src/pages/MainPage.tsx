@@ -157,7 +157,6 @@ const MainPage = () => {
       <UserCreateDialog
         isUserCreateDialog={isUserCreateDialog}
         handleUserCreateDialog={handleUserCreateDialog}
-        refetchUsers={refetchUsers}
       />
       <Footer />
     </div>

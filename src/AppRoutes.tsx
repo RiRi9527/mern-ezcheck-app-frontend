@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 
 import ProtectedRoute from "./auth/ProtectedRoute";
 import MainPage from "./pages/MainPage";
+import TransferPage from "./pages/TransferPage";
 
 const AppRoutes = () => {
   return (
@@ -11,6 +12,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route path="/main/:userId" element={<MainPage />} />
       </Route>
+      <Route path="/transfer/:userId" element={<TransferPage />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
