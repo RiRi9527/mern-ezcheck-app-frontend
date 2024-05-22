@@ -1,5 +1,5 @@
 import { PersonStanding } from "lucide-react";
-import { useGetAllUsers } from "@/api/AuthApi";
+
 import { Separator } from "@radix-ui/react-separator";
 
 import { useState } from "react";
@@ -8,6 +8,7 @@ type Props = {
   handleClick: (user: any) => void;
   refetch: () => void;
   handleUserCreateDialog: () => void;
+  users?: any;
 };
 
 export type NavListUser = {
@@ -20,10 +21,9 @@ const UserInfoNav = ({
   handleClick,
   refetch,
   handleUserCreateDialog,
+  users,
 }: Props) => {
   const [show, setShow] = useState(false);
-
-  const { users, refetch: refetchAllUsers } = useGetAllUsers();
 
   const handleClickAndRefetch = async (user: any) => {
     await handleClick(user);
@@ -40,7 +40,7 @@ const UserInfoNav = ({
         <PersonStanding className="text-white" />
       </div>
       {show && (
-        <div className="absolute top-0 left-10 h-full w-[300px] bg-gray-800 z-10">
+        <div className="absolute top-0 left-10 h-full w-[300px] bg-gray-800 z-50">
           <div className="h-full w-full flex flex-col justify-between overflow-y-auto bg-gray-800">
             <div>
               <h1 className=" text-white pl-2">online:</h1>

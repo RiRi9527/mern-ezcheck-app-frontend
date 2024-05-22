@@ -9,7 +9,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/main" element={<MainPage />} />
+        <Route path="/main/:userId" element={<MainPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

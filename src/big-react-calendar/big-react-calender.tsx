@@ -39,6 +39,7 @@ const MyCalendar = ({ user }: Props) => {
       allDay: boolean;
     }[]
   >([]);
+
   const generateWorkHours = (initialSchedule: any) => {
     const startOfWeek = moment().startOf("week"); // Start date of the week
     const endOfWeek = moment().endOf("week"); // End date of the week

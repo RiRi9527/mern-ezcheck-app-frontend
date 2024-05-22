@@ -14,6 +14,8 @@ import EmployeeInfoRightBar from "@/components/EmployeeInfoRightBar";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import UserCreateDialog from "@/components/UserCreateDialog";
+import { useGetAllUsers } from "@/api/AuthApi";
+import { useParams } from "react-router-dom";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,19 +46,13 @@ const MainPage = () => {
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
 
   // auth check
-
-  const [userId, setUserId] = useState(auth?._id);
+  const { userId: initialId } = useParams();
+  const [userId, setUserId] = useState(initialId);
 
   const [isUserCreateDialog, setIsUserCreateDialog] = useState(false);
   const handleUserCreateDialog = () => {
     setIsUserCreateDialog(!isUserCreateDialog);
   };
-
-  useEffect(() => {
-    if (auth?._id) {
-      setUserId(auth._id);
-    }
-  }, [auth]); // to make sure we have user in initial render
 
   const [openEmployeeInfoRightBar, setOpenEmployeeInfoRightBar] =
     useState(false);
@@ -81,6 +77,8 @@ const MainPage = () => {
     refetch: refetchUser,
   } = useGetAccount(userId);
 
+  const { users, refetch: refetchUsers } = useGetAllUsers();
+
   if (isError) {
     return <>Error fetching user data (404 Not Found)</>;
   }
@@ -102,6 +100,7 @@ const MainPage = () => {
               handleClick={handleUserSwitchClick}
               refetch={refetchUser}
               handleUserCreateDialog={handleUserCreateDialog}
+              users={users}
             />
           </div>
           <div className="w-full h-9">
@@ -150,7 +149,7 @@ const MainPage = () => {
             </div>
 
             <div className="p-4 ">
-              <EmployeeInfoRightBar user={user} />
+              <EmployeeInfoRightBar user={user} refetchUser={refetchUser} />
             </div>
           </div>
         )}
@@ -158,6 +157,7 @@ const MainPage = () => {
       <UserCreateDialog
         isUserCreateDialog={isUserCreateDialog}
         handleUserCreateDialog={handleUserCreateDialog}
+        refetchUsers={refetchUsers}
       />
       <Footer />
     </div>

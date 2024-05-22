@@ -14,7 +14,7 @@ const SettingNav = () => {
         <Settings color="white" />
       </div>
       {show && (
-        <div className="absolute top-0 left-10 h-full w-[300px] bg-gray-800 z-10">
+        <div className="absolute top-0 left-10 h-full w-[300px] bg-gray-800 z-50">
           Setting
         </div>
       )}

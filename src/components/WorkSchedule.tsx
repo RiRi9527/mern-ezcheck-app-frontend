@@ -191,7 +191,7 @@ const WorkSchedule = ({ user, refetch }: Props) => {
             <span className=" relative flex justify-center">
               {schedule[day].disable ? (
                 <span
-                  className=" flex justify-center hover:bg-green-300  w-full rounded-lg z-50"
+                  className=" flex justify-center hover:bg-green-300  w-full rounded-lg z-30"
                   onClick={() => handleDisable(day)}
                 >
                   Enable
