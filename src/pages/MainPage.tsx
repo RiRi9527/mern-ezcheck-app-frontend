@@ -77,7 +77,7 @@ const MainPage = () => {
     refetch: refetchUser,
   } = useGetAccount(userId);
 
-  const { users, refetch: refetchUsers } = useGetAllUsers();
+  const { users } = useGetAllUsers();
 
   if (isError) {
     return <>Error fetching user data (404 Not Found)</>;

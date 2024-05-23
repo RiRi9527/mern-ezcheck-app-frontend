@@ -14,13 +14,20 @@ type Props = {
 };
 
 const MyCalendar = ({ user }: Props) => {
-  const { events, refetch: refetchEvents } = useGetEvents(user?._id);
+  const [currentUserId, setCurrentUserId] = useState<string | undefined>();
+  const { events, refetch: refetchEvents } = useGetEvents(currentUserId);
 
   useEffect(() => {
     if (user) {
-      refetchEvents();
+      setCurrentUserId(user._id);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (currentUserId) {
+      refetchEvents();
+    }
+  }, [currentUserId, refetchEvents]);
 
   useEffect(() => {
     if (user?.schedule) {

@@ -13,26 +13,6 @@ export const useGetEvents = (userId?: string) => {
       throw new Error("Failed to get event");
     }
     const eventData = await response.json();
-    // const formattedEventData = eventData.map((event: any) => ({
-    //   ...event,
-    //   start: new Date(event.startTime),
-    //   end: new Date(event.endTime),
-    // }));
-    // const formattedEventData = eventData.map((event: any) => {
-    //   if (!event.endTime && event.title === "Actual Time") {
-    //     return {
-    //       ...event,
-    //       start: new Date(event.startTime),
-    //       end: new Date(),
-    //     };
-    //   } else {
-    //     return {
-    //       ...event,
-    //       start: new Date(event.startTime),
-    //       end: new Date(event.endTime),
-    //     };
-    //   }
-    // });
 
     const formattedEventData = eventData.map((event: any) => {
       switch (true) {
@@ -63,21 +43,11 @@ export const useGetEvents = (userId?: string) => {
   };
   const {
     data: events,
-    // isLoading,
-    // isSuccess,
-    // error,
+
     refetch,
   } = useQuery("fetchEvent", getEventsRequest, {
     enabled: !!userId,
   });
-
-  // if (isSuccess) {
-  //   toast.success("Event got!");
-  // }
-
-  // if (error) {
-  //   toast.error("Unable to get Event");
-  // }
 
   return { events, refetch };
 };
