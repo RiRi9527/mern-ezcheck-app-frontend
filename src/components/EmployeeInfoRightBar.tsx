@@ -5,9 +5,10 @@ import { User } from "@/types";
 type Props = {
   user?: User;
   refetchUser: () => void;
+  refetchUsers: () => void;
 };
 
-const EmployeeInfoRightBar = ({ user, refetchUser }: Props) => {
+const EmployeeInfoRightBar = ({ user, refetchUser, refetchUsers }: Props) => {
   const { isLoading: isUpdateLoading, updateAccount } = useUpdateAccount(
     user?._id
   );
@@ -20,6 +21,7 @@ const EmployeeInfoRightBar = ({ user, refetchUser }: Props) => {
             onSave={updateAccount}
             isLoading={isUpdateLoading}
             refetchUser={refetchUser}
+            refetchUsers={refetchUsers}
           />
         </div>
       )}

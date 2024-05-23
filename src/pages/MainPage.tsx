@@ -77,7 +77,7 @@ const MainPage = () => {
     refetch: refetchUser,
   } = useGetAccount(userId);
 
-  const { users } = useGetAllUsers();
+  const { users, refetch: refetchUsers } = useGetAllUsers();
 
   if (isError) {
     return <>Error fetching user data (404 Not Found)</>;
@@ -149,7 +149,11 @@ const MainPage = () => {
             </div>
 
             <div className="p-4 ">
-              <EmployeeInfoRightBar user={user} refetchUser={refetchUser} />
+              <EmployeeInfoRightBar
+                user={user}
+                refetchUser={refetchUser}
+                refetchUsers={refetchUsers}
+              />
             </div>
           </div>
         )}

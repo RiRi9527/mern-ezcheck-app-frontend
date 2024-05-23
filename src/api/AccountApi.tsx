@@ -55,7 +55,8 @@ export const useCreateAccount = () => {
   } = useMutation(createAccountRequest, {
     onSuccess: async (data) => {
       toast.success("User created!");
-      navigate(`/transfer/${data}`);
+      navigate(`/main/${data}`);
+      window.location.reload();
     },
   });
 
@@ -75,7 +76,7 @@ export const useCreateAccount = () => {
 export const useUpdateAccount = (userId?: string) => {
   const updateUserRequest = async (
     accountFormData: FormData
-  ): Promise<User> => {
+  ): Promise<string> => {
     const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
       method: "PUT",
       body: accountFormData,
