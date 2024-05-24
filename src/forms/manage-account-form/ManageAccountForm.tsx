@@ -16,22 +16,18 @@ export type AccountFromData = {
 
 type Props = {
   account?: User;
-  onSave: (accountFormData: FormData) => void;
+  onSave: any;
   isLoading: boolean;
   isSuccess?: boolean;
-  refetchUsers?: () => void;
-  refetchUser?: () => void;
-  // handleUserCreateDialog?: () => void;
+  handleClickAndRefetch: (userId: string) => void;
 };
 
 const ManageAccountForm = ({
   onSave,
   isLoading,
   account,
-  refetchUsers,
-  refetchUser,
-}: // handleUserCreateDialog,
-Props) => {
+  handleClickAndRefetch,
+}: Props) => {
   const { auth } = useAppContext();
   const disable =
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
@@ -64,12 +60,9 @@ Props) => {
       const imageFile = formDataJson.imageFile[0];
       formData.append("imageFile", imageFile);
     }
-    await onSave(formData);
-    refetchUser?.();
-    refetchUsers?.();
-    // setTimeout(() => {
-    //   handleUserCreateDialog?.();
-    // }, 500);
+    const fetchedUserId = await onSave(formData);
+    console.log(fetchedUserId);
+    handleClickAndRefetch(fetchedUserId);
   };
 
   const [selectedFile, setSelectedFile] = useState(null);

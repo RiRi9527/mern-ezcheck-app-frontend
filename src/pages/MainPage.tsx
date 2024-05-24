@@ -1,5 +1,5 @@
 import SettingNav from "@/components/SettingNav";
-import UserInfoNav, { NavListUser } from "@/components/UserInfoNav";
+import UserInfoNav from "@/components/UserInfoNav";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import MyCalendar from "@/big-react-calendar/big-react-calender";
@@ -61,12 +61,14 @@ const MainPage = () => {
     setOpenEmployeeInfoRightBar(!openEmployeeInfoRightBar);
   };
 
-  const handleUserSwitchClick = (user: NavListUser) => {
+  const handleClickAndRefetch = async (userId: string) => {
     if (disable) {
       return;
     }
 
-    setUserId(user._id);
+    setUserId(userId);
+    await refetchUsers();
+    await refetchUser();
     toast.success("User Switched!");
   };
 
@@ -97,8 +99,7 @@ const MainPage = () => {
         >
           <div className="w-full h-9">
             <UserInfoNav
-              handleClick={handleUserSwitchClick}
-              refetch={refetchUser}
+              handleClickAndRefetch={handleClickAndRefetch}
               handleUserCreateDialog={handleUserCreateDialog}
               users={users}
             />
@@ -151,8 +152,7 @@ const MainPage = () => {
             <div className="p-4 ">
               <EmployeeInfoRightBar
                 user={user}
-                refetchUser={refetchUser}
-                refetchUsers={refetchUsers}
+                handleClickAndRefetch={handleClickAndRefetch}
               />
             </div>
           </div>
@@ -161,6 +161,7 @@ const MainPage = () => {
       <UserCreateDialog
         isUserCreateDialog={isUserCreateDialog}
         handleUserCreateDialog={handleUserCreateDialog}
+        handleClickAndRefetch={handleClickAndRefetch}
       />
       <Footer />
     </div>

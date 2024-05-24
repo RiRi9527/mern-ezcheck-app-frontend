@@ -5,8 +5,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { useState } from "react";
 
 type Props = {
-  handleClick: (user: any) => void;
-  refetch: () => void;
+  handleClickAndRefetch: (user: string) => void;
   handleUserCreateDialog: () => void;
   users?: any;
 };
@@ -18,17 +17,11 @@ export type NavListUser = {
 };
 
 const UserInfoNav = ({
-  handleClick,
-  refetch,
+  handleClickAndRefetch,
   handleUserCreateDialog,
   users,
 }: Props) => {
   const [show, setShow] = useState(false);
-
-  const handleClickAndRefetch = async (user: any) => {
-    await handleClick(user);
-    refetch();
-  };
 
   return (
     <div
@@ -49,7 +42,7 @@ const UserInfoNav = ({
                   <div
                     className="flex flex-col justify-center items-center hover:cursor-pointer text-white "
                     key={user._id}
-                    onClick={() => handleClickAndRefetch(user)}
+                    onClick={() => handleClickAndRefetch(user._id)}
                   >
                     <div
                       className="w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center  border-2 border-green-500 overflow-hidden"
@@ -79,7 +72,7 @@ const UserInfoNav = ({
                   <div
                     className="flex flex-col justify-center items-center hover:cursor-pointer"
                     key={user._id}
-                    onClick={() => handleClickAndRefetch(user)}
+                    onClick={() => handleClickAndRefetch(user._id)}
                   >
                     <div
                       className=" relative w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center border-2 border-gray-500"
