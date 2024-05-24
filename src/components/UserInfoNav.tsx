@@ -3,11 +3,11 @@ import { PersonStanding } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 
 import { useState } from "react";
+import { useAppContext } from "@/content/AppContext";
+import { toast } from "sonner";
 
 type Props = {
-  handleClickAndRefetch: (user: string) => void;
   handleUserCreateDialog: () => void;
-  users?: any;
 };
 
 export type NavListUser = {
@@ -16,12 +16,16 @@ export type NavListUser = {
   imageUrl: string;
 };
 
-const UserInfoNav = ({
-  handleClickAndRefetch,
-  handleUserCreateDialog,
-  users,
-}: Props) => {
+const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
   const [show, setShow] = useState(false);
+
+  const { users, handleUserIdChange, refetchUser } = useAppContext();
+
+  const handleClickAndRefetchUser = async (userId: string) => {
+    await handleUserIdChange(userId);
+    await refetchUser();
+    toast.success("User Switch");
+  };
 
   return (
     <div
@@ -42,7 +46,7 @@ const UserInfoNav = ({
                   <div
                     className="flex flex-col justify-center items-center hover:cursor-pointer text-white "
                     key={user._id}
-                    onClick={() => handleClickAndRefetch(user._id)}
+                    onClick={() => handleClickAndRefetchUser(user._id)}
                   >
                     <div
                       className="w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center  border-2 border-green-500 overflow-hidden"
@@ -72,7 +76,7 @@ const UserInfoNav = ({
                   <div
                     className="flex flex-col justify-center items-center hover:cursor-pointer"
                     key={user._id}
-                    onClick={() => handleClickAndRefetch(user._id)}
+                    onClick={() => handleClickAndRefetchUser(user._id)}
                   >
                     <div
                       className=" relative w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center border-2 border-gray-500"

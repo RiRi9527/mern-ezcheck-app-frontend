@@ -1,4 +1,3 @@
-import { User } from "@/types";
 import {
   Card,
   CardContent,
@@ -8,21 +7,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
+import { useAppContext } from "@/content/AppContext";
 
 type Props = {
-  user?: User;
-  isLoading: boolean;
   handleOpenEmployeeInfoRightBar: () => void;
 };
 
-const EmployeeCard = ({
-  user,
-  isLoading,
-  handleOpenEmployeeInfoRightBar,
-}: Props) => {
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
+const EmployeeCard = ({ handleOpenEmployeeInfoRightBar }: Props) => {
+  const { user } = useAppContext();
 
   return (
     <Card className=" relative h-full w-full flex flex-col justify-center items-center">

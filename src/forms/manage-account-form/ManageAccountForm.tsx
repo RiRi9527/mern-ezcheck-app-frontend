@@ -19,15 +19,9 @@ type Props = {
   onSave: any;
   isLoading: boolean;
   isSuccess?: boolean;
-  handleClickAndRefetch: (userId: string) => void;
 };
 
-const ManageAccountForm = ({
-  onSave,
-  isLoading,
-  account,
-  handleClickAndRefetch,
-}: Props) => {
+const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
   const { auth } = useAppContext();
   const disable =
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
@@ -46,6 +40,8 @@ const ManageAccountForm = ({
     }
   }, [account, reset]);
 
+  const { handleUserIdChange, refetchUser, refetchUsers } = useAppContext();
+
   const existingImageUrls = watch("imageUrl");
 
   const onSubmit = async (formDataJson: AccountFromData) => {
@@ -61,8 +57,10 @@ const ManageAccountForm = ({
       formData.append("imageFile", imageFile);
     }
     const fetchedUserId = await onSave(formData);
-    console.log(fetchedUserId);
-    handleClickAndRefetch(fetchedUserId);
+
+    await handleUserIdChange(fetchedUserId);
+    await refetchUser();
+    await refetchUsers();
   };
 
   const [selectedFile, setSelectedFile] = useState(null);

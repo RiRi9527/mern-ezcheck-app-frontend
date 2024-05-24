@@ -4,16 +4,14 @@ import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
 import { useCallback, useEffect, useState } from "react";
-import { EventData, User } from "@/types";
+import { EventData } from "@/types";
 import { useGetEvents } from "@/api/EventApi";
+import { useAppContext } from "@/content/AppContext";
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
-type Props = {
-  user?: User;
-};
-
-const MyCalendar = ({ user }: Props) => {
+const MyCalendar = () => {
+  const { user } = useAppContext();
   const [currentUserId, setCurrentUserId] = useState<string | undefined>();
   const { events, refetch: refetchEvents } = useGetEvents(currentUserId);
 

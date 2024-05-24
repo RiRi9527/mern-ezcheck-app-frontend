@@ -2,20 +2,15 @@ import SettingNav from "@/components/SettingNav";
 import UserInfoNav from "@/components/UserInfoNav";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import MyCalendar from "@/big-react-calendar/big-react-calender";
 import Ads from "@/components/Ads";
 import EmployeeCard from "@/components/EmployeeCard";
 import CheckInfo from "@/components/CheckInfo";
 import WorkSchedule from "@/components/WorkSchedule";
-import { useAppContext } from "@/content/AppContext";
-import { toast } from "sonner";
-import { useGetAccount } from "@/api/AccountApi";
 import EmployeeInfoRightBar from "@/components/EmployeeInfoRightBar";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import UserCreateDialog from "@/components/UserCreateDialog";
-import { useGetAllUsers } from "@/api/AuthApi";
-import { useParams } from "react-router-dom";
+import MyCalendar from "@/big-react-calendar/big-react-calender";
 
 const MainPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,14 +36,6 @@ const MainPage = () => {
     };
   }, []);
 
-  const { auth } = useAppContext();
-  const disable =
-    auth?.position !== "CEO" && auth?.position !== "Office Manager";
-
-  // auth check
-  const { userId: initialId } = useParams();
-  const [userId, setUserId] = useState(initialId);
-
   const [isUserCreateDialog, setIsUserCreateDialog] = useState(false);
   const handleUserCreateDialog = () => {
     setIsUserCreateDialog(!isUserCreateDialog);
@@ -60,30 +47,6 @@ const MainPage = () => {
   const handleOpenEmployeeInfoRightBar = () => {
     setOpenEmployeeInfoRightBar(!openEmployeeInfoRightBar);
   };
-
-  const handleClickAndRefetch = async (userId: string) => {
-    if (disable) {
-      return;
-    }
-
-    setUserId(userId);
-    await refetchUsers();
-    await refetchUser();
-    toast.success("User Switched!");
-  };
-
-  const {
-    user,
-    isLoading: isGetLoading,
-    isError,
-    refetch: refetchUser,
-  } = useGetAccount(userId);
-
-  const { users, refetch: refetchUsers } = useGetAllUsers();
-
-  if (isError) {
-    return <>Error fetching user data (404 Not Found)</>;
-  }
 
   return (
     <div className="flex flex-col min-h-screen ">
@@ -98,11 +61,7 @@ const MainPage = () => {
           }`}
         >
           <div className="w-full h-9">
-            <UserInfoNav
-              handleClickAndRefetch={handleClickAndRefetch}
-              handleUserCreateDialog={handleUserCreateDialog}
-              users={users}
-            />
+            <UserInfoNav handleUserCreateDialog={handleUserCreateDialog} />
           </div>
           <div className="w-full h-9">
             <SettingNav />
@@ -116,8 +75,6 @@ const MainPage = () => {
               </div>
               <div>
                 <EmployeeCard
-                  user={user}
-                  isLoading={isGetLoading}
                   handleOpenEmployeeInfoRightBar={
                     handleOpenEmployeeInfoRightBar
                   }
@@ -127,10 +84,10 @@ const MainPage = () => {
                 <CheckInfo />
               </div>
               <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
-                <WorkSchedule user={user} refetch={refetchUser} />
+                <WorkSchedule />
               </div>
               <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
-                <MyCalendar user={user} />
+                <MyCalendar />
               </div>
             </div>
           </div>
@@ -150,10 +107,7 @@ const MainPage = () => {
             </div>
 
             <div className="p-4 ">
-              <EmployeeInfoRightBar
-                user={user}
-                handleClickAndRefetch={handleClickAndRefetch}
-              />
+              <EmployeeInfoRightBar />
             </div>
           </div>
         )}
@@ -161,7 +115,6 @@ const MainPage = () => {
       <UserCreateDialog
         isUserCreateDialog={isUserCreateDialog}
         handleUserCreateDialog={handleUserCreateDialog}
-        handleClickAndRefetch={handleClickAndRefetch}
       />
       <Footer />
     </div>
