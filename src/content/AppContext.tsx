@@ -1,16 +1,19 @@
 import { useGetAccount } from "@/api/AccountApi";
 import { useGetAllUsers, useValidateToken } from "@/api/AuthApi";
-import { User } from "@/types";
+import { useGetEvents } from "@/api/EventApi";
+import { EventData, User, Users } from "@/types";
 import React, { useContext, useEffect, useState } from "react";
 
 type AppContext = {
   isLoggedIn: boolean;
   auth: User | undefined;
   user: User | undefined;
-  users: any;
+  users: Users | undefined;
+  events: EventData[] | undefined;
   handleUserIdChange: (userId: string) => void;
   refetchUser: any;
   refetchUsers: any;
+  refetchEvents: any;
 };
 
 const AppContext = React.createContext<AppContext | undefined>(undefined);
@@ -29,6 +32,7 @@ export const AppContextProvider = ({
 
   const { user, refetch: refetchUser } = useGetAccount(userId);
   const { users, refetch: refetchUsers } = useGetAllUsers();
+  const { events, refetch: refetchEvents } = useGetEvents(userId);
 
   const handleUserIdChange = (userId: string) => {
     if (isError) {
@@ -44,8 +48,10 @@ export const AppContextProvider = ({
         auth,
         user,
         users,
+        events,
         refetchUser,
         refetchUsers,
+        refetchEvents,
         handleUserIdChange,
       }}
     >

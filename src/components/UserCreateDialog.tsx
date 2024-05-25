@@ -25,6 +25,7 @@ const UserCreateDialog: React.FC<EventDialogProps> = ({
             onSave={createAccount}
             isLoading={isCreateLoading}
             isSuccess={isSuccess}
+            handleUserCreateDialog={handleUserCreateDialog}
           />
         </div>
       </DialogContent>

@@ -12,34 +12,8 @@ export const useGetEvents = (userId?: string) => {
     if (!response.ok) {
       throw new Error("Failed to get event");
     }
-    const eventData = await response.json();
 
-    const formattedEventData = eventData.map((event: any) => {
-      switch (true) {
-        case !event.endTime && event.title === "Working Time":
-          const start = new Date(event.startTime);
-          const end = new Date();
-          return {
-            ...event,
-            start,
-            end,
-          };
-        case !event.endTime || !event.startTime:
-          return {
-            ...event,
-            start: new Date(event.startTime || event.endTime || ""),
-            end: new Date(event.startTime || event.endTime || ""), // 如果没有结束时间，开始和结束时间相同
-          };
-        default:
-          return {
-            ...event,
-            start: new Date(event.startTime),
-            end: new Date(event.endTime),
-          };
-      }
-    });
-
-    return formattedEventData;
+    return response.json();
   };
   const {
     data: events,

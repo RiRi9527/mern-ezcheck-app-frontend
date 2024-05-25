@@ -4,28 +4,19 @@ import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
 import { useCallback, useEffect, useState } from "react";
-import { EventData } from "@/types";
-import { useGetEvents } from "@/api/EventApi";
+import { BackgroundEvent, EventData } from "@/types";
 import { useAppContext } from "@/content/AppContext";
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
 const MyCalendar = () => {
-  const { user } = useAppContext();
-  const [currentUserId, setCurrentUserId] = useState<string | undefined>();
-  const { events, refetch: refetchEvents } = useGetEvents(currentUserId);
+  const { user, events: fetchedEvent } = useAppContext();
 
-  useEffect(() => {
-    if (user) {
-      setCurrentUserId(user._id);
-    }
-  }, [user]);
+  const [events, setEvents] = useState<EventData[] | undefined>();
+  const [backgroundEvents, setBackgroundEvents] = useState<BackgroundEvent[]>();
 
-  useEffect(() => {
-    if (currentUserId) {
-      refetchEvents();
-    }
-  }, [currentUserId, refetchEvents]);
+  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
 
   useEffect(() => {
     if (user?.schedule) {
@@ -34,16 +25,33 @@ const MyCalendar = () => {
     }
   }, [user]);
 
-  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
-  const [backgroundEvents, setBackgroundEvents] = useState<
-    {
-      title: string;
-      start: Date;
-      end: Date;
-      allDay: boolean;
-    }[]
-  >([]);
+  useEffect(() => {
+    if (fetchedEvent) {
+      const formattedEventData = fetchedEvent.map((event: any) => {
+        switch (true) {
+          case !event.end && event.title === "Working Time":
+            return {
+              ...event,
+              start: new Date(event.start),
+              end: new Date(),
+            };
+          case !event.end || !event.start:
+            return {
+              ...event,
+              start: new Date(event.start || event.end || ""),
+              end: new Date(event.start || event.end || ""), // 如果没有结束时间，开始和结束时间相同
+            };
+          default:
+            return {
+              ...event,
+              start: new Date(event.start),
+              end: new Date(event.end),
+            };
+        }
+      });
+      setEvents(formattedEventData);
+    }
+  }, [fetchedEvent]);
 
   const generateWorkHours = (initialSchedule: any) => {
     const startOfWeek = moment().startOf("week"); // Start date of the week
@@ -94,8 +102,8 @@ const MyCalendar = () => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        startTime: event.start.toString(),
-        endTime: event.end.toString(),
+        start: event.start.toString(),
+        end: event.end.toString(),
       };
       setSelectedEvent(SelectedEvent);
     },
@@ -109,8 +117,8 @@ const MyCalendar = () => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        startTime: event.start.toString(),
-        endTime: event.end.toString(),
+        start: event.start.toString(),
+        end: event.end.toString(),
       };
       setSelectedEvent(SelectedEvent);
     },
@@ -177,7 +185,6 @@ const MyCalendar = () => {
         isEventDialogOpen={isEventDialogOpen}
         closeEventDialog={closeEventDialog}
         selectedEvent={selectedEvent}
-        userId={user?._id}
       />
     </>
   );

@@ -19,9 +19,15 @@ type Props = {
   onSave: any;
   isLoading: boolean;
   isSuccess?: boolean;
+  handleUserCreateDialog?: () => void;
 };
 
-const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
+const ManageAccountForm = ({
+  onSave,
+  isLoading,
+  account,
+  handleUserCreateDialog,
+}: Props) => {
   const { auth } = useAppContext();
   const disable =
     auth?.position !== "CEO" && auth?.position !== "Office Manager";
@@ -61,6 +67,7 @@ const ManageAccountForm = ({ onSave, isLoading, account }: Props) => {
     await handleUserIdChange(fetchedUserId);
     await refetchUser();
     await refetchUsers();
+    await handleUserCreateDialog?.();
   };
 
   const [selectedFile, setSelectedFile] = useState(null);

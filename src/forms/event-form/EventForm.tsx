@@ -1,58 +1,46 @@
-import {
-  useCreateEvent,
-  useDeleteEvent,
-  useEditEvent,
-  useGetEvents,
-} from "@/api/EventApi";
+import { useCreateEvent, useDeleteEvent, useEditEvent } from "@/api/EventApi";
+import { useAppContext } from "@/content/AppContext";
 import { EventData } from "@/types";
 import { useForm } from "react-hook-form";
 
-// export type EventData = {
-//   _id: string;
-//   title: string;
-//   userName: string;
-//   password: string;
-// };
-
 type Props = {
   event?: EventData;
-  userId?: string;
   closeEventDialog: () => void;
 };
 
-const EventFrom = ({ event, userId, closeEventDialog }: Props) => {
+const EventFrom = ({ event, closeEventDialog }: Props) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm<EventData>({ defaultValues: event });
 
-  const { refetch } = useGetEvents(userId);
-  const { isLoading: isCreateLoading, createEvent } = useCreateEvent(userId);
-  const { isLoading: isEditLoading, editEvent } = useEditEvent(userId);
-  const { isLoading: isDeleteLoading, deleteEvent } = useDeleteEvent(userId);
+  const { user, refetchEvents } = useAppContext();
+
+  const { isLoading: isCreateLoading, createEvent } = useCreateEvent(user?._id);
+  const { isLoading: isEditLoading, editEvent } = useEditEvent(user?._id);
+  const { isLoading: isDeleteLoading, deleteEvent } = useDeleteEvent(user?._id);
 
   const onSubmit = async (eventData: EventData) => {
     if (event?._id) {
       await editEvent(eventData);
-      refetch();
+      refetchEvents();
     } else {
       await createEvent(eventData);
-      refetch();
+      refetchEvents();
     }
     setTimeout(() => {
       closeEventDialog();
-      refetch();
     }, 500); // 500 milliseconds delay
   };
 
   const handleDelete = async () => {
     if (event?._id) {
-      deleteEvent(event._id);
+      await deleteEvent(event._id);
+      refetchEvents();
     }
     setTimeout(() => {
       closeEventDialog();
-      refetch();
     }, 500); // 500 milliseconds delay
   };
 
@@ -78,7 +66,7 @@ const EventFrom = ({ event, userId, closeEventDialog }: Props) => {
               required: "This field is required",
               minLength: {
                 value: 1,
-                message: "Password must be at least 6 characters",
+                message: "Password must be at least 1 characters",
               },
             })}
           ></input>
@@ -90,32 +78,32 @@ const EventFrom = ({ event, userId, closeEventDialog }: Props) => {
           startTime
           <input
             className="border rounded w-full py-1 px-2 font-normal"
-            {...register("startTime", {
+            {...register("start", {
               required: "This field is required",
               minLength: {
-                value: 1,
-                message: "Password must be at least 6 characters",
+                value: 57,
+                message: "Password must be at least 57 characters",
               },
             })}
           ></input>
-          {errors.startTime && (
-            <span className="text-red-500">{errors.startTime.message}</span>
+          {errors.start && (
+            <span className="text-red-500">{errors.start.message}</span>
           )}
         </label>
         <label className="text-gray-700 text-sm font-bold flex-1">
           endTime
           <input
             className="border rounded w-full py-1 px-2 font-normal"
-            {...register("endTime", {
+            {...register("end", {
               required: "This field is required",
               minLength: {
-                value: 1,
-                message: "Password must be at least 6 characters",
+                value: 57,
+                message: "Password must be at least 57 characters",
               },
             })}
           ></input>
-          {errors.endTime && (
-            <span className="text-red-500">{errors.endTime.message}</span>
+          {errors.end && (
+            <span className="text-red-500">{errors.end.message}</span>
           )}
         </label>
         <span>

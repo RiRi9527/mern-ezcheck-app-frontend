@@ -21,9 +21,21 @@ export type UserSchedule = {
   sunday?: { checkIn: string; checkOut: string };
 };
 
+export type Users = {
+  _id?: string;
+  imageUrl: string;
+};
+
 export type EventData = {
   _id?: string;
   title: string;
-  startTime?: string;
-  endTime?: string;
+  start?: string;
+  end?: string;
+};
+
+export type BackgroundEvent = {
+  title: string;
+  start: Date;
+  end: Date;
+  allDay: boolean;
 };
