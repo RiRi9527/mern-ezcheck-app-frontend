@@ -27,6 +27,26 @@ export const AppContextProvider = ({
   const [userId, setUserId] = useState(auth?._id);
 
   useEffect(() => {
+    const getWeekStartAndEnd = () => {
+      const now = new Date();
+      const dayOfWeek = now.getDay(); // Sunday - Saturday : 0 - 6
+      const diffToSunday = dayOfWeek; // Difference to the previous Sunday
+      const diffToSaturday = 6 - dayOfWeek; // Difference to the next Saturday
+
+      const sunday = new Date(now);
+      sunday.setDate(now.getDate() - diffToSunday);
+      sunday.setHours(0, 0, 0, 0); // Set to Sunday 00:00
+
+      const saturday = new Date(now);
+      saturday.setDate(now.getDate() + diffToSaturday);
+      saturday.setHours(23, 59, 59, 999); // Set to Saturday 23:59:59:999
+
+      console.log(sunday);
+      console.log(saturday);
+    };
+
+    getWeekStartAndEnd();
+
     setUserId(auth?._id);
   }, [auth]);
 
