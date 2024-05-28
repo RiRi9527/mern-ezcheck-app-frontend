@@ -22,7 +22,8 @@ export type UserSchedule = {
 };
 
 export type Users = {
-  _id?: string;
+  _id: string;
+  firstName: string;
   imageUrl: string;
 };
 

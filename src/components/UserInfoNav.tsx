@@ -5,25 +5,22 @@ import { Separator } from "@radix-ui/react-separator";
 import { useState } from "react";
 import { useAppContext } from "@/content/AppContext";
 import { toast } from "sonner";
+import { Users } from "@/types";
 
 type Props = {
   handleUserCreateDialog: () => void;
 };
 
-export type NavListUser = {
-  _id: string;
-  firstName: string;
-  imageUrl: string;
-};
-
 const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
   const [show, setShow] = useState(false);
 
-  const { users, handleUserIdChange, refetchUser } = useAppContext();
+  const { users, handleUserIdChange, refetchUser, refetchEvents } =
+    useAppContext();
 
   const handleClickAndRefetchUser = async (userId: string) => {
     await handleUserIdChange(userId);
-    await refetchUser();
+    refetchUser();
+    refetchEvents();
     toast.success("User Switch");
   };
 
@@ -42,7 +39,7 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
             <div>
               <h1 className=" text-white pl-2">online:</h1>
               <div className="p-2 grid grid-cols-4 gap-3">
-                {users?.map((user: NavListUser) => (
+                {users?.map((user: Users) => (
                   <div
                     className="flex flex-col justify-center items-center hover:cursor-pointer text-white "
                     key={user._id}
@@ -72,7 +69,7 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
               <Separator className="mt-4 border"></Separator>
               <h1 className="pl-2">offline:</h1>
               <div className="p-2 grid grid-cols-4 gap-3 pb-6">
-                {users?.map((user: NavListUser) => (
+                {users?.map((user: Users) => (
                   <div
                     className="flex flex-col justify-center items-center hover:cursor-pointer"
                     key={user._id}

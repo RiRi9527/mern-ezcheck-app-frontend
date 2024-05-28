@@ -81,7 +81,7 @@ const EventFrom = ({ event, closeEventDialog }: Props) => {
             {...register("start", {
               required: "This field is required",
               minLength: {
-                value: 57,
+                value: 1,
                 message: "Password must be at least 57 characters",
               },
             })}
@@ -97,7 +97,7 @@ const EventFrom = ({ event, closeEventDialog }: Props) => {
             {...register("end", {
               required: "This field is required",
               minLength: {
-                value: 57,
+                value: 1,
                 message: "Password must be at least 57 characters",
               },
             })}

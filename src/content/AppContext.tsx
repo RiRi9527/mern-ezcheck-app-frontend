@@ -8,12 +8,18 @@ type AppContext = {
   isLoggedIn: boolean;
   auth: User | undefined;
   user: User | undefined;
-  users: Users | undefined;
+  users: Users[] | undefined;
   events: EventData[] | undefined;
   handleUserIdChange: (userId: string) => void;
+  handleTimeRangeChange: (start: string, end: string) => void;
   refetchUser: any;
   refetchUsers: any;
   refetchEvents: any;
+};
+
+type TimeRange = {
+  start: string | undefined;
+  end: string | undefined;
 };
 
 const AppContext = React.createContext<AppContext | undefined>(undefined);
@@ -25,6 +31,7 @@ export const AppContextProvider = ({
 }) => {
   const { isError, auth } = useValidateToken();
   const [userId, setUserId] = useState(auth?._id);
+  const [timeRange, setTimeRange] = useState<TimeRange | undefined>();
 
   useEffect(() => {
     const getWeekStartAndEnd = () => {
@@ -41,8 +48,12 @@ export const AppContextProvider = ({
       saturday.setDate(now.getDate() + diffToSaturday);
       saturday.setHours(23, 59, 59, 999); // Set to Saturday 23:59:59:999
 
-      console.log(sunday);
-      console.log(saturday);
+      // console.log(sunday.toISOString);
+      // console.log(saturday);
+      setTimeRange({
+        start: sunday.toISOString(),
+        end: saturday.toISOString(),
+      });
     };
 
     getWeekStartAndEnd();
@@ -52,13 +63,24 @@ export const AppContextProvider = ({
 
   const { user, refetch: refetchUser } = useGetAccount(userId);
   const { users, refetch: refetchUsers } = useGetAllUsers();
-  const { events, refetch: refetchEvents } = useGetEvents(userId);
+  const { events, refetch: refetchEvents } = useGetEvents(
+    userId,
+    timeRange?.start,
+    timeRange?.end
+  );
 
   const handleUserIdChange = (userId: string) => {
     if (isError) {
       return;
     }
     setUserId(userId);
+  };
+
+  const handleTimeRangeChange = (start: string, end: string) => {
+    setTimeRange({
+      start: start,
+      end: end,
+    });
   };
 
   return (
@@ -73,6 +95,7 @@ export const AppContextProvider = ({
         refetchUsers,
         refetchEvents,
         handleUserIdChange,
+        handleTimeRangeChange,
       }}
     >
       {children}

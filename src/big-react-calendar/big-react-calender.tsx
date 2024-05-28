@@ -10,7 +10,7 @@ import { useAppContext } from "@/content/AppContext";
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
 const MyCalendar = () => {
-  const { user, events: fetchedEvent } = useAppContext();
+  const { user, events: fetchedEvent, handleTimeRangeChange } = useAppContext();
 
   const [events, setEvents] = useState<EventData[] | undefined>();
   const [backgroundEvents, setBackgroundEvents] = useState<BackgroundEvent[]>();
@@ -102,8 +102,8 @@ const MyCalendar = () => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        start: event.start.toString(),
-        end: event.end.toString(),
+        start: event.start.toISOString(),
+        end: event.end.toISOString(),
       };
       setSelectedEvent(SelectedEvent);
     },
@@ -117,13 +117,30 @@ const MyCalendar = () => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        start: event.start.toString(),
-        end: event.end.toString(),
+        start: event.start.toISOString(),
+        end: event.end.toISOString(),
       };
       setSelectedEvent(SelectedEvent);
     },
     [setIsEventDialogOpen, setSelectedEvent]
   );
+
+  const handleRangeChange = (range: any) => {
+    let start, end;
+    if (Array.isArray(range)) {
+      // The week view returns an array of dates
+      start = range[0];
+      end = range[range.length - 1];
+    } else {
+      // The month view and day view return an object
+      start = range.start;
+      end = range.end;
+    }
+
+    const dateStringStart = start.toISOString();
+    const dateStringEnd = end.toISOString();
+    handleTimeRangeChange(dateStringStart, dateStringEnd);
+  };
 
   const eventStyleGetter = useCallback(
     (
@@ -178,6 +195,7 @@ const MyCalendar = () => {
           eventPropGetter={eventStyleGetter}
           onSelectEvent={handleEventSelect}
           onSelectSlot={handleSlotSelect}
+          onRangeChange={handleRangeChange}
           selectable
         />
       </div>

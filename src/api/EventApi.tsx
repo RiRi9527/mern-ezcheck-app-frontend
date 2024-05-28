@@ -4,24 +4,27 @@ import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetEvents = (userId?: string) => {
+export const useGetEvents = (userId?: string, start?: string, end?: string) => {
   const getEventsRequest = async (): Promise<EventData[]> => {
-    const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
-      //   credentials: "include",
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/api/events/${userId}/${start}/${end}`,
+      {
+        //   credentials: "include",
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to get event");
     }
 
     return response.json();
   };
-  const {
-    data: events,
-
-    refetch,
-  } = useQuery("fetchEvent", getEventsRequest, {
-    enabled: !!userId,
-  });
+  const { data: events, refetch } = useQuery(
+    ["fetchEvent", start, end],
+    getEventsRequest,
+    {
+      enabled: !!userId,
+    }
+  );
 
   return { events, refetch };
 };
