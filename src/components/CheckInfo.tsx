@@ -58,7 +58,7 @@ const CheckInfo = () => {
 
   const handleCheckInClick = async () => {
     const title = "Working Time";
-    const currentTimeString = new Date().toString();
+    const currentTimeString = new Date().toISOString();
 
     await createCheckInEvent({ title, start: currentTimeString });
     refetchEvents();
@@ -66,7 +66,7 @@ const CheckInfo = () => {
 
   const handleCheckOutClick = async () => {
     const title = "Working Time";
-    const currentTimeString = new Date().toString();
+    const currentTimeString = new Date().toISOString();
     await createCheckOutEvent({ title, end: currentTimeString });
     refetchEvents();
   };
