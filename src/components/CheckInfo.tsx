@@ -1,14 +1,7 @@
-import {
-  Card,
-  //   CardContent,
-  //   CardDescription,
-  //   CardFooter,
-  //   CardHeader,
-  //   CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/content/AppContext";
-import { useCreateCheckIn, useCreateCheckOut } from "@/api/EventApi";
+import { useCreateCheckIn, useCreateCheckOut, useGetHrs } from "@/api/EventApi";
 import { useEffect, useState } from "react";
 
 const CheckInfo = () => {
@@ -17,6 +10,8 @@ const CheckInfo = () => {
   const { createCheckOutEvent } = useCreateCheckOut(user?._id);
 
   const [filteredEvent, setFilteredEvent] = useState<any>();
+
+  const { hrs, refetchHrs } = useGetHrs(user?._id);
 
   useEffect(() => {
     const today = new Date().toDateString();
@@ -69,6 +64,7 @@ const CheckInfo = () => {
     const currentTimeString = new Date().toISOString();
     await createCheckOutEvent({ title, end: currentTimeString });
     refetchEvents();
+    refetchHrs();
   };
 
   return (
@@ -83,30 +79,10 @@ const CheckInfo = () => {
             Check in
           </Button>
         )}
-
-        {/* <div className=" absolute right-0 bottom-0">
-          {filteredEvent.end ? (
-            <Button
-              onClick={handleCheckInClick}
-              variant="link"
-              className=" w-20 "
-            >
-              Check in
-            </Button>
-          ) : (
-            <Button
-              onClick={handleCheckOutClick}
-              variant="link"
-              className=" w-20 "
-            >
-              Check out
-            </Button>
-          )}
-        </div> */}
       </div>
       <div className="flex flex-col justify-center items-center border-t">
         <div>
-          <p>Total Hrs: 40hr</p>
+          <p>Total Hrs: {hrs}hrs</p>
           <p>Check in at: {filteredEvent?.start}</p>
           <p>Check out at: {filteredEvent?.end}</p>
         </div>

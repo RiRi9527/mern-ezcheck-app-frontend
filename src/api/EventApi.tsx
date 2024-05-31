@@ -223,3 +223,25 @@ export const useCreateCheckOut = (userId?: string) => {
 
   return { createCheckOutEvent, isLoading, isSuccess };
 };
+
+export const useGetHrs = (userId?: string) => {
+  const getEventsHrs = async (): Promise<string> => {
+    const response = await fetch(`${API_BASE_URL}/api/events/${userId}/hrs`, {
+      //   credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to get hrs");
+    }
+
+    return response.json();
+  };
+  const { data: hrs, refetch: refetchHrs } = useQuery(
+    "fetchHrs",
+    getEventsHrs,
+    {
+      enabled: !!userId,
+    }
+  );
+
+  return { hrs, refetchHrs };
+};
