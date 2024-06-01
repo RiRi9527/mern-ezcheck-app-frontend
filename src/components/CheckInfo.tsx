@@ -30,7 +30,7 @@ const CheckInfo = () => {
       const eventStartTime = new Date(lastCheckEvent.start).toLocaleTimeString(
         [],
         {
-          hour: "2-digit",
+          hour: "numeric",
           minute: "2-digit",
           hour12: true, // Include AM or PM
         }
@@ -41,7 +41,7 @@ const CheckInfo = () => {
     if (lastCheckEvent?.end) {
       // Extract the time part from the start date
       const eventEndTime = new Date(lastCheckEvent.end).toLocaleTimeString([], {
-        hour: "2-digit",
+        hour: "numeric",
         minute: "2-digit",
         hour12: true, // Include AM or PM
       });
@@ -82,7 +82,9 @@ const CheckInfo = () => {
       </div>
       <div className="flex flex-col justify-center items-center border-t">
         <div>
-          <p>Total Hrs: {hrs}hrs</p>
+          <p>
+            Total Hrs: {hrs?.hours}hrs {hrs?.minutes}mins
+          </p>
           <p>Check in at: {filteredEvent?.start}</p>
           <p>Check out at: {filteredEvent?.end}</p>
         </div>

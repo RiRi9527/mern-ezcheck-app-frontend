@@ -1,4 +1,4 @@
-import { EventData } from "@/types";
+import { EventData, totalHrs } from "@/types";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
@@ -225,7 +225,7 @@ export const useCreateCheckOut = (userId?: string) => {
 };
 
 export const useGetHrs = (userId?: string) => {
-  const getEventsHrs = async (): Promise<string> => {
+  const getEventsHrs = async (): Promise<totalHrs> => {
     const response = await fetch(`${API_BASE_URL}/api/events/${userId}/hrs`, {
       //   credentials: "include",
     });
