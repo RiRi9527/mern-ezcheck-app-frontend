@@ -40,3 +40,8 @@ export type BackgroundEvent = {
   end: Date;
   allDay: boolean;
 };
+
+export type totalHrs = {
+  hours: string;
+  minutes: string;
+};
