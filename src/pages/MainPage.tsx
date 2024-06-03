@@ -68,26 +68,28 @@ const MainPage = () => {
           </div>
         </div>
         <div className="flex-1 flex justify-center bg-gray-200">
-          <div className=" pt-4 w-full max-w-[2200px]">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 auto-rows-[260px] m-1">
-              <div className=" sm:col-span-2 ">
-                <Ads />
-              </div>
-              <div>
-                <EmployeeCard
-                  handleOpenEmployeeInfoRightBar={
-                    handleOpenEmployeeInfoRightBar
-                  }
-                />
-              </div>
-              <div className="">
-                <CheckInfo />
-              </div>
-              <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
-                <WorkSchedule />
-              </div>
-              <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
-                <MyCalendar />
+          <div className="w-full flex justify-center">
+            <div className=" pt-4 w-full max-w-[2200px]">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 auto-rows-[260px] m-1">
+                <div className=" sm:col-span-2 ">
+                  <Ads />
+                </div>
+                <div>
+                  <EmployeeCard
+                    handleOpenEmployeeInfoRightBar={
+                      handleOpenEmployeeInfoRightBar
+                    }
+                  />
+                </div>
+                <div className="">
+                  <CheckInfo />
+                </div>
+                <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
+                  <WorkSchedule />
+                </div>
+                <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
+                  <MyCalendar />
+                </div>
               </div>
             </div>
           </div>
