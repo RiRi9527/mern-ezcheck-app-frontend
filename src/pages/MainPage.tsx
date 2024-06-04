@@ -70,7 +70,11 @@ const MainPage = () => {
         <div className="flex-1 flex justify-center bg-gray-200">
           <div className="w-full flex justify-center">
             <div className=" pt-4 w-full max-w-[2200px]">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 auto-rows-[260px] m-1">
+              <div
+                className={`grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${
+                  !openEmployeeInfoRightBar && "2xl:grid-cols-5"
+                } auto-rows-[260px] m-1`}
+              >
                 <div className=" sm:col-span-2 ">
                   <Ads />
                 </div>
@@ -87,7 +91,11 @@ const MainPage = () => {
                 <div className=" sm:col-span-2 sm:row-span-1 lg:col-span-1 lg:row-span-2">
                   <WorkSchedule />
                 </div>
-                <div className="sm:col-span-3 2xl:col-span-4 row-span-2">
+                <div
+                  className={`sm:col-span-3 ${
+                    !openEmployeeInfoRightBar && "2xl:col-span-4 "
+                  } row-span-2`}
+                >
                   <MyCalendar />
                 </div>
               </div>
@@ -95,7 +103,7 @@ const MainPage = () => {
           </div>
         </div>
         {openEmployeeInfoRightBar && (
-          <div className=" w-[400px] flex flex-col z-50 bg-gray-200 border-l-2 border-b-8  border-gray-700">
+          <div className=" absolute h-full right-0 lg:static lg:h-auto lg:right-auto w-[400px] flex flex-col z-50 bg-gray-200 border-l-2 border-b-8  border-gray-700">
             <div className="w-full h-8 bg-gray-700 flex justify-between px-2 items-center">
               <span className=" text-white text-xs">Employee Info.</span>
               <span>
