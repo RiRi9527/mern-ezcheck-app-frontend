@@ -103,7 +103,7 @@ const MainPage = () => {
           </div>
         </div>
         {openEmployeeInfoRightBar && (
-          <div className=" absolute h-full right-0 lg:static lg:h-auto lg:right-auto w-[400px] flex flex-col z-50 bg-gray-200 border-l-2 border-b-8  border-gray-700">
+          <div className=" absolute h-full right-0 lg:static lg:h-auto lg:right-auto w-[350px] 2xl:w-[400px] flex flex-col z-50 bg-gray-200 border-l-2 border-b-8  border-gray-700">
             <div className="w-full h-8 bg-gray-700 flex justify-between px-2 items-center">
               <span className=" text-white text-xs">Employee Info.</span>
               <span>
