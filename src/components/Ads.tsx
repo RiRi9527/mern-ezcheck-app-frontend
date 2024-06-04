@@ -16,6 +16,12 @@ const Ads = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
+  // 从adsArray中随机抽取5个广告
+  const randomAds = adsArray
+    .slice()
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5);
+
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true }));
 
   useEffect(() => {
@@ -44,13 +50,13 @@ const Ads = () => {
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.play}
-        className=" flex justify-center items-center "
+        className="flex justify-center items-center"
       >
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {randomAds.map((ad, index) => (
             <CarouselItem key={index}>
-              <Card className="flex justify-center items-center h-[260px] min-w-[90px] ">
-                <span className="text-4xl font-semibold">{index + 1}</span>
+              <Card className="flex justify-center items-center h-[260px] min-w-[90px] md:mx:12 lg:mx-16">
+                <p className="text-4xl font-semibold text-center px-6 ">{ad}</p>
               </Card>
             </CarouselItem>
           ))}
@@ -74,3 +80,25 @@ const Ads = () => {
 };
 
 export default Ads;
+
+const adsArray = [
+  "Seize the day.",
+  "Embrace the unknown.",
+  "Chase your dreams.",
+  "Stay strong, stay positive.",
+  "Your potential is limitless.",
+  "Be fearless.",
+  "Focus on the good.",
+  "Keep moving forward.",
+  "Rise above the storm.",
+  "Believe in the power of now.",
+  "You are capable of amazing things.",
+  "Every moment is a fresh beginning.",
+  "The best is yet to come.",
+  "You are stronger than you think.",
+  "Dream big, work hard, stay focused.",
+  "In the midst of difficulty lies opportunity.",
+  "You are the architect of your destiny.",
+  "Difficult roads often lead to beautiful destinations.",
+  "Your journey matters, not the destination.",
+];
