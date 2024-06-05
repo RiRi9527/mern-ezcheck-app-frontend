@@ -3,11 +3,7 @@
   color: white;
 } */
 /* 
-div[role="button"][title*="Working Time"] {
-  display: flex;
-  flex-direction: column-reverse;
-  opacity: 0.5;
-}
+
 
 div[role="button"][title*="Working Time"] .rbc-event-content {
   display: flex;
@@ -15,7 +11,7 @@ div[role="button"][title*="Working Time"] .rbc-event-content {
 } */
 
 .rbc-background-event {
-  opacity: 0.3 !important;
+  opacity: 0.5 !important;
   display: flex !important;
   justify-content: center !important;
   flex-direction: column-reverse !important;
@@ -24,4 +20,9 @@ div[role="button"][title*="Working Time"] .rbc-event-content {
 .rbc-background-event .rbc-event-content {
   display: flex;
   flex-direction: column-reverse;
+}
+
+div[role="button"][title*="Working Time"] {
+  background-color: rgba(0, 255, 0, 0.5);
+  color: black;
 }

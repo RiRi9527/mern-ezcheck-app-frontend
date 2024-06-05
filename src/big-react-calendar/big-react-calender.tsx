@@ -142,35 +142,35 @@ const MyCalendar = () => {
     handleTimeRangeChange(dateStringStart, dateStringEnd);
   };
 
-  const eventStyleGetter = useCallback(
-    (
-      event: any,
-      start: Date,
-      end: Date
-      // isSelected: boolean
-    ) => {
-      if (event.title === "Working Time") {
-        const time = end.getTime() - start.getTime();
-        if (time >= 8 * 1000 * 60 * 60) {
-          return {
-            style: {
-              backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
-            },
-          };
-        }
-        if (time < 7.83 * 1000 * 60 * 60) {
-          return {
-            style: {
-              backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
-            },
-          };
-        }
-      }
+  // const eventStyleGetter = useCallback(
+  //   (
+  //     event: any,
+  //     start: Date,
+  //     end: Date
+  //     // isSelected: boolean
+  //   ) => {
+  //     if (event.title === "Working Time") {
+  //       const time = end.getTime() - start.getTime();
+  //       if (time >= 8 * 1000 * 60 * 60) {
+  //         return {
+  //           style: {
+  //             backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
+  //           },
+  //         };
+  //       }
+  //       if (time < 7.83 * 1000 * 60 * 60) {
+  //         return {
+  //           style: {
+  //             backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
+  //           },
+  //         };
+  //       }
+  //     }
 
-      return {};
-    },
-    []
-  );
+  //     return {};
+  //   },
+  //   []
+  // );
 
   return (
     <>
@@ -192,7 +192,7 @@ const MyCalendar = () => {
             agenda: true,
           }}
           backgroundEvents={backgroundEvents} // Set background events
-          eventPropGetter={eventStyleGetter}
+          // eventPropGetter={eventStyleGetter}
           onSelectEvent={handleEventSelect}
           onSelectSlot={handleSlotSelect}
           onRangeChange={handleRangeChange}
