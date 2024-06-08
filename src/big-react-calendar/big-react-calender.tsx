@@ -39,7 +39,7 @@ const MyCalendar = () => {
             return {
               ...event,
               start: new Date(event.start || event.end || ""),
-              end: new Date(event.start || event.end || ""), // 如果没有结束时间，开始和结束时间相同
+              end: new Date(event.start || event.end || ""), // If there is no end time, the start and end times are the same
             };
           default:
             return {
