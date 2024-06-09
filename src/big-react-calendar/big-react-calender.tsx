@@ -149,9 +149,13 @@ const MyCalendar = () => {
       end = range.end;
     }
 
-    const dateStringStart = start.toISOString();
-    const dateStringEnd = end.toISOString();
+    end.setHours(23, 59, 59, 999);
+
+    const dateStringStart = range.toISOString();
+    const dateStringEnd = range.toISOString();
     handleTimeRangeChange(dateStringStart, dateStringEnd);
+
+    console.log(range);
   };
 
   // const eventStyleGetter = useCallback(
