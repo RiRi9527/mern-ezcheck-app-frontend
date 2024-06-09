@@ -20,17 +20,32 @@ type CombinedEventData = EventData & FormatEventData;
 
 // Utility function to split date-time string into date and time parts
 const splitDateTime = (dateTime: string) => {
-  const [date, time] = dateTime.split("T");
+  const [date, time] = dateTime.split(", ");
+  const [month, day, year] = date.split("/");
   const [hours, minutes] = time.split(":");
-  console.log(dateTime);
-  console.log(time);
-  console.log(hours);
-  console.log(minutes);
+
+  const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+    2,
+    "0"
+  )}`;
+  const formattedTime = `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
 
   return {
-    date,
-    time: `${hours}:${minutes}`,
+    date: formattedDate,
+    time: formattedTime,
   };
+};
+
+const combineDateTime = (outputDate: string, outputTime: string) => {
+  // 将日期和时间解析成单独的部分
+  const [year, month, day] = outputDate.split("-").map(Number);
+  const [hours, minutes] = outputTime.split(":").map(Number);
+
+  // 创建一个新的 Date 对象，注意月份从0开始
+  const date = new Date(year, month - 1, day, hours, minutes);
+  const dateString = date.toISOString();
+
+  return dateString;
 };
 
 const EventForm = ({ event, closeEventDialog }: Props) => {
@@ -64,11 +79,14 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
 
   const onSubmit = async (eventData: CombinedEventData) => {
     if (eventData.startDate && eventData.startTime) {
-      eventData.start = `${eventData.startDate}T${eventData.startTime}:00.000Z`;
+      eventData.start = combineDateTime(
+        eventData.startDate,
+        eventData.startTime
+      );
     }
 
     if (eventData.endDate && eventData.endTime) {
-      eventData.end = `${eventData.endDate}T${eventData.endTime}:00.000Z`;
+      eventData.end = combineDateTime(eventData.endDate, eventData.endTime);
     }
 
     if (event?._id) {

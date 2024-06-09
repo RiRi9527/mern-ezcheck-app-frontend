@@ -102,8 +102,14 @@ const MyCalendar = () => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        start: event.start.toISOString(),
-        end: event.end.toISOString(),
+        start: event.start.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
+        end: event.end.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
       };
       setSelectedEvent(SelectedEvent);
     },
@@ -117,8 +123,14 @@ const MyCalendar = () => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        start: event.start.toISOString(),
-        end: event.end.toISOString(),
+        start: event.start.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
+        end: event.end.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
       };
       setSelectedEvent(SelectedEvent);
     },
