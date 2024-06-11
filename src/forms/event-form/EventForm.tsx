@@ -1,9 +1,4 @@
-import {
-  useCreateEvent,
-  useDeleteEvent,
-  useEditEvent,
-  useGetHrs,
-} from "@/api/EventApi";
+import { useCreateEvent, useDeleteEvent, useEditEvent } from "@/api/EventApi";
 import { useAppContext } from "@/content/AppContext";
 import { EventData } from "@/types";
 import { useForm } from "react-hook-form";
@@ -95,16 +90,17 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
     }
 
     if (event?._id) {
-      await editEvent(eventData);
+      const response = await editEvent(eventData);
       refetchEvents();
-      if (event.title === "Working Time") {
+      if (response?.title === "Working Time") {
         refetchHrs();
       }
     } else {
-      await createEvent(eventData);
+      const response = await createEvent(eventData);
       refetchEvents();
-      // need to add condition to avoid waste retch hrs
-      refetchHrs();
+      if (response?.title === "Working Time") {
+        refetchHrs();
+      }
     }
 
     setTimeout(() => {

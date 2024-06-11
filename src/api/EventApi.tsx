@@ -30,7 +30,7 @@ export const useGetEvents = (userId?: string, start?: string, end?: string) => {
 };
 
 export const useCreateEvent = (userId?: string) => {
-  const createEventRequest = async (eventData: EventData): Promise<string> => {
+  const createEventRequest = async (eventData: EventData): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const useCreateEvent = (userId?: string) => {
     isSuccess,
     error,
     reset,
-    data: eventId,
+    data,
   } = useMutation(createEventRequest);
 
   if (isSuccess) {
@@ -63,11 +63,11 @@ export const useCreateEvent = (userId?: string) => {
     reset();
   }
 
-  return { createEvent, isLoading, isSuccess, eventId };
+  return { createEvent, isLoading, isSuccess, data };
 };
 
 export const useEditEvent = (userId?: string) => {
-  const editEventRequest = async (eventData: EventData): Promise<string> => {
+  const editEventRequest = async (eventData: EventData): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -87,7 +87,6 @@ export const useEditEvent = (userId?: string) => {
     isSuccess,
     error,
     reset,
-    data: eventId,
   } = useMutation(editEventRequest);
 
   if (isSuccess) {
@@ -100,7 +99,7 @@ export const useEditEvent = (userId?: string) => {
     reset();
   }
 
-  return { editEvent, isLoading, isSuccess, eventId };
+  return { editEvent, isLoading, isSuccess };
 };
 
 export const useDeleteEvent = (userId?: string) => {

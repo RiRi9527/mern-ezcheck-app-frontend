@@ -1,7 +1,7 @@
 import { useGetAccount } from "@/api/AccountApi";
 import { useGetAllUsers, useValidateToken } from "@/api/AuthApi";
 import { useGetEvents, useGetHrs } from "@/api/EventApi";
-import { EventData, User, Users } from "@/types";
+import { EventData, User, Users, totalHrs } from "@/types";
 import React, { useContext, useEffect, useState } from "react";
 
 type AppContext = {
@@ -10,6 +10,7 @@ type AppContext = {
   user: User | undefined;
   users: Users[] | undefined;
   events: EventData[] | undefined;
+  hrs: totalHrs | undefined;
   handleUserIdChange: (userId: string) => void;
   handleTimeRangeChange: (start: string, end: string) => void;
   refetchUser: any;
@@ -69,7 +70,7 @@ export const AppContextProvider = ({
     timeRange?.start,
     timeRange?.end
   );
-  const { refetchHrs } = useGetHrs(userId);
+  const { hrs, refetchHrs } = useGetHrs(userId);
 
   const handleUserIdChange = (userId: string) => {
     if (isError) {
@@ -93,6 +94,7 @@ export const AppContextProvider = ({
         user,
         users,
         events,
+        hrs,
         refetchUser,
         refetchUsers,
         refetchEvents,
