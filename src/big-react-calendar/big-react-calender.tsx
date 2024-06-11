@@ -151,8 +151,8 @@ const MyCalendar = () => {
 
     end.setHours(23, 59, 59, 999);
 
-    const dateStringStart = range.toISOString();
-    const dateStringEnd = range.toISOString();
+    const dateStringStart = start.toISOString();
+    const dateStringEnd = end.toISOString();
     handleTimeRangeChange(dateStringStart, dateStringEnd);
 
     console.log(range);

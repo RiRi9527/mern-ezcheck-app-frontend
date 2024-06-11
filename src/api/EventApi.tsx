@@ -236,7 +236,7 @@ export const useGetHrs = (userId?: string) => {
     return response.json();
   };
   const { data: hrs, refetch: refetchHrs } = useQuery(
-    "fetchHrs",
+    ["fetchHrs", userId],
     getEventsHrs,
     {
       enabled: !!userId,

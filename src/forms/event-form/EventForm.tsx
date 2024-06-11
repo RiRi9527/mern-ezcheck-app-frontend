@@ -1,4 +1,9 @@
-import { useCreateEvent, useDeleteEvent, useEditEvent } from "@/api/EventApi";
+import {
+  useCreateEvent,
+  useDeleteEvent,
+  useEditEvent,
+  useGetHrs,
+} from "@/api/EventApi";
 import { useAppContext } from "@/content/AppContext";
 import { EventData } from "@/types";
 import { useForm } from "react-hook-form";
@@ -49,7 +54,7 @@ const combineDateTime = (outputDate: string, outputTime: string) => {
 };
 
 const EventForm = ({ event, closeEventDialog }: Props) => {
-  const { user, refetchEvents } = useAppContext();
+  const { user, refetchEvents, refetchHrs } = useAppContext();
 
   // Split the event start and end times into date and time parts
   const startDateTime = event?.start
@@ -92,9 +97,14 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
     if (event?._id) {
       await editEvent(eventData);
       refetchEvents();
+      if (event.title === "Working Time") {
+        refetchHrs();
+      }
     } else {
       await createEvent(eventData);
       refetchEvents();
+      // need to add condition to avoid waste retch hrs
+      refetchHrs();
     }
 
     setTimeout(() => {
@@ -106,6 +116,9 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
     if (event?._id) {
       await deleteEvent(event._id);
       refetchEvents();
+      if (event.title === "Working Time") {
+        refetchHrs();
+      }
     }
     setTimeout(() => {
       closeEventDialog();
