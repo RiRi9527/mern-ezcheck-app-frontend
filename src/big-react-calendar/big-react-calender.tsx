@@ -154,8 +154,6 @@ const MyCalendar = () => {
     const dateStringStart = start.toISOString();
     const dateStringEnd = end.toISOString();
     handleTimeRangeChange(dateStringStart, dateStringEnd);
-
-    console.log(range);
   };
 
   // const eventStyleGetter = useCallback(
