@@ -19,7 +19,7 @@ export const useGetEvents = (userId?: string, start?: string, end?: string) => {
     return response.json();
   };
   const { data: events, refetch } = useQuery(
-    ["fetchEvent", start, end],
+    ["fetchEvent", start, end, userId],
     getEventsRequest,
     {
       enabled: !!userId,

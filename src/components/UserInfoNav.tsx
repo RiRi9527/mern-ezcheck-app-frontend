@@ -14,13 +14,10 @@ type Props = {
 const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
   const [show, setShow] = useState(false);
 
-  const { users, handleUserIdChange, refetchUser, refetchEvents } =
-    useAppContext();
+  const { users, handleUserIdChange } = useAppContext();
 
   const handleClickAndRefetchUser = async (userId: string) => {
-    await handleUserIdChange(userId);
-    refetchUser();
-    refetchEvents();
+    handleUserIdChange(userId);
     toast.success("User Switch");
   };
 

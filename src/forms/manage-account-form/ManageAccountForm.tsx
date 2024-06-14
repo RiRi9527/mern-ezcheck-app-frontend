@@ -46,7 +46,7 @@ const ManageAccountForm = ({
     }
   }, [account, reset]);
 
-  const { handleUserIdChange, refetchUser, refetchUsers } = useAppContext();
+  const { handleUserIdChange, refetchUsers } = useAppContext();
 
   const existingImageUrls = watch("imageUrl");
 
@@ -64,10 +64,9 @@ const ManageAccountForm = ({
     }
     const fetchedUserId = await onSave(formData);
 
-    await handleUserIdChange(fetchedUserId);
-    await refetchUser();
-    await refetchUsers();
-    await handleUserCreateDialog?.();
+    handleUserIdChange(fetchedUserId);
+    refetchUsers();
+    handleUserCreateDialog?.();
   };
 
   const [selectedFile, setSelectedFile] = useState(null);

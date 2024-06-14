@@ -21,7 +21,7 @@ export const useGetAccount = (userId?: string) => {
     isLoading,
     isError,
     refetch,
-  } = useQuery("fetchUser", getUserRequest, {
+  } = useQuery(["fetchUser", userId], getUserRequest, {
     enabled: !!userId,
   });
 
