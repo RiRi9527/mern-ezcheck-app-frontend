@@ -49,6 +49,7 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
                       }}
                     ></div>
                     <h1> {user.firstName}</h1>
+                    <h2>{user.status}</h2>
                   </div>
                 ))}
                 <div

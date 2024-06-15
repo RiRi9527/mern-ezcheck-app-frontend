@@ -25,6 +25,7 @@ export type Users = {
   _id: string;
   firstName: string;
   imageUrl: string;
+  status: string;
 };
 
 export type EventData = {
