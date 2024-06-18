@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/content/AppContext";
+import { useState } from "react";
+import { useUpdateStatus } from "@/api/AccountApi";
 
 type Props = {
   handleOpenEmployeeInfoRightBar: () => void;
@@ -15,6 +17,24 @@ type Props = {
 
 const EmployeeCard = ({ handleOpenEmployeeInfoRightBar }: Props) => {
   const { user } = useAppContext();
+
+  const [busy, setBusy] = useState(false);
+
+  const { updateStatus } = useUpdateStatus(user?._id);
+
+  const handleChangeStatus = async () => {
+    let status;
+    if (!busy) {
+      status = await updateStatus("busy");
+    } else {
+      status = await updateStatus("online");
+    }
+    if (status === "busy") {
+      setBusy(true);
+    } else {
+      setBusy(false);
+    }
+  };
 
   return (
     <Card className=" relative h-full w-full flex flex-col justify-center items-center">
@@ -35,10 +55,19 @@ const EmployeeCard = ({ handleOpenEmployeeInfoRightBar }: Props) => {
       </CardFooter>
       <Button
         variant="ghost"
-        className="absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-green-300"
+        className="absolute left-0 top-0 w-16 h-8 border-2 hover:bg-green-300"
         onClick={handleOpenEmployeeInfoRightBar}
       >
         Edit
+      </Button>
+      <Button
+        variant="ghost"
+        className={`absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-red-300 ${
+          busy && "bg-red-500"
+        }`}
+        onClick={handleChangeStatus}
+      >
+        Busy
       </Button>
     </Card>
   );
