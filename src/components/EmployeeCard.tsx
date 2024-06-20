@@ -18,21 +18,19 @@ type Props = {
 const EmployeeCard = ({ handleOpenEmployeeInfoRightBar }: Props) => {
   const { user } = useAppContext();
 
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState(user?.status);
 
   const { updateStatus } = useUpdateStatus(user?._id);
 
   const handleChangeStatus = async () => {
     let status;
-    if (!busy) {
+    if (busy !== "busy") {
       status = await updateStatus("busy");
     } else {
       status = await updateStatus("online");
     }
-    if (status === "busy") {
-      setBusy(true);
-    } else {
-      setBusy(false);
+    if (status !== null && status !== undefined) {
+      setBusy(status);
     }
   };
 
@@ -63,7 +61,7 @@ const EmployeeCard = ({ handleOpenEmployeeInfoRightBar }: Props) => {
       <Button
         variant="ghost"
         className={`absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-red-300 ${
-          busy && "bg-red-500"
+          busy === "busy" && "bg-red-500"
         }`}
         onClick={handleChangeStatus}
       >

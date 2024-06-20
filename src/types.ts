@@ -5,6 +5,7 @@ export type User = {
   firstName: string;
   lastName: string;
   position: string;
+  status: string;
   hourlyWage: number;
   isAdmin: boolean;
   imageUrl: string;
