@@ -34,6 +34,7 @@ export const AppContextProvider = ({
   const { isError, auth } = useValidateToken();
   const [userId, setUserId] = useState(auth?._id);
   const [timeRange, setTimeRange] = useState<TimeRange | undefined>();
+  const [payrollDate, setPayrollDate] = useState<number>(0);
 
   useEffect(() => {
     const getWeekStartAndEnd = () => {
@@ -70,7 +71,7 @@ export const AppContextProvider = ({
     timeRange?.start,
     timeRange?.end
   );
-  const { hrs, refetchHrs } = useGetHrs(userId);
+  const { hrs, refetchHrs } = useGetHrs(userId, payrollDate);
 
   const handleUserIdChange = (userId: string) => {
     if (isError) {
@@ -84,6 +85,10 @@ export const AppContextProvider = ({
       start: start,
       end: end,
     });
+  };
+
+  const handlePayrollDateChange = (num: number) => {
+    setPayrollDate(num);
   };
 
   return (

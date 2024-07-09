@@ -223,13 +223,10 @@ export const useCreateCheckOut = (userId?: string) => {
   return { createCheckOutEvent, isLoading, isSuccess };
 };
 
-export const useGetHrs = (userId?: string) => {
+export const useGetHrs = (userId?: string, payrollDate?: number) => {
   const getEventsHrs = async (): Promise<totalHrs> => {
-    const date = new Date();
-    const dateString = date.toISOString();
-
     const response = await fetch(
-      `${API_BASE_URL}/api/events/hrs/${userId}/${dateString}`,
+      `${API_BASE_URL}/api/events/hrs/${userId}/${payrollDate}`,
       {
         //   credentials: "include",
       }
@@ -241,7 +238,7 @@ export const useGetHrs = (userId?: string) => {
     return response.json();
   };
   const { data: hrs, refetch: refetchHrs } = useQuery(
-    ["fetchHrs", userId],
+    ["fetchHrs", userId, payrollDate],
     getEventsHrs,
     {
       enabled: !!userId,
