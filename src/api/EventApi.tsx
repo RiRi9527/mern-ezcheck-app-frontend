@@ -7,7 +7,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const useGetEvents = (userId?: string, start?: string, end?: string) => {
   const getEventsRequest = async (): Promise<EventData[]> => {
     const response = await fetch(
-      `${API_BASE_URL}/api/events/${userId}/${start}/${end}`,
+      `${API_BASE_URL}/api/events/get/${userId}/${start}/${end}`,
       {
         //   credentials: "include",
       }
@@ -225,9 +225,15 @@ export const useCreateCheckOut = (userId?: string) => {
 
 export const useGetHrs = (userId?: string) => {
   const getEventsHrs = async (): Promise<totalHrs> => {
-    const response = await fetch(`${API_BASE_URL}/api/events/${userId}/hrs`, {
-      //   credentials: "include",
-    });
+    const date = new Date();
+    const dateString = date.toISOString();
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/events/hrs/${userId}/${dateString}`,
+      {
+        //   credentials: "include",
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to get hrs");
     }
