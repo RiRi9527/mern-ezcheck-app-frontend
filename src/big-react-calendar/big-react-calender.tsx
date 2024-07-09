@@ -4,30 +4,19 @@ import "./index.css";
 import moment from "moment";
 import EventDialog from "@/components/EventDialog";
 import { useCallback, useEffect, useState } from "react";
-import { EventData, User } from "@/types";
-import { useGetEvents } from "@/api/EventApi";
+import { BackgroundEvent, EventData } from "@/types";
+import { useAppContext } from "@/content/AppContext";
 
 const localizer = momentLocalizer(moment); // or globalizeLocalizer
 
-type Props = {
-  user?: User;
-};
+const MyCalendar = () => {
+  const { user, events: fetchedEvent, handleTimeRangeChange } = useAppContext();
 
-const MyCalendar = ({ user }: Props) => {
-  const [currentUserId, setCurrentUserId] = useState<string | undefined>();
-  const { events, refetch: refetchEvents } = useGetEvents(currentUserId);
+  const [events, setEvents] = useState<EventData[] | undefined>();
+  const [backgroundEvents, setBackgroundEvents] = useState<BackgroundEvent[]>();
 
-  useEffect(() => {
-    if (user) {
-      setCurrentUserId(user._id);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (currentUserId) {
-      refetchEvents();
-    }
-  }, [currentUserId, refetchEvents]);
+  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
 
   useEffect(() => {
     if (user?.schedule) {
@@ -36,16 +25,33 @@ const MyCalendar = ({ user }: Props) => {
     }
   }, [user]);
 
-  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<EventData | undefined>();
-  const [backgroundEvents, setBackgroundEvents] = useState<
-    {
-      title: string;
-      start: Date;
-      end: Date;
-      allDay: boolean;
-    }[]
-  >([]);
+  useEffect(() => {
+    if (fetchedEvent) {
+      const formattedEventData = fetchedEvent.map((event: any) => {
+        switch (true) {
+          case !event.end && event.title === "Working Time":
+            return {
+              ...event,
+              start: new Date(event.start),
+              end: new Date(),
+            };
+          case !event.end || !event.start:
+            return {
+              ...event,
+              start: new Date(event.start || event.end || ""),
+              end: new Date(event.start || event.end || ""), // If there is no end time, the start and end times are the same
+            };
+          default:
+            return {
+              ...event,
+              start: new Date(event.start),
+              end: new Date(event.end),
+            };
+        }
+      });
+      setEvents(formattedEventData);
+    }
+  }, [fetchedEvent]);
 
   const generateWorkHours = (initialSchedule: any) => {
     const startOfWeek = moment().startOf("week"); // Start date of the week
@@ -96,8 +102,14 @@ const MyCalendar = ({ user }: Props) => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        startTime: event.start.toString(),
-        endTime: event.end.toString(),
+        start: event.start.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
+        end: event.end.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
       };
       setSelectedEvent(SelectedEvent);
     },
@@ -111,43 +123,68 @@ const MyCalendar = ({ user }: Props) => {
       let SelectedEvent: EventData = {
         _id: event._id,
         title: event.title,
-        startTime: event.start.toString(),
-        endTime: event.end.toString(),
+        start: event.start.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
+        end: event.end.toLocaleString("en-US", {
+          timeZone: "America/New_York",
+          hour12: false,
+        }),
       };
       setSelectedEvent(SelectedEvent);
     },
     [setIsEventDialogOpen, setSelectedEvent]
   );
 
-  const eventStyleGetter = useCallback(
-    (
-      event: any,
-      start: Date,
-      end: Date
-      // isSelected: boolean
-    ) => {
-      if (event.title === "Working Time") {
-        const time = end.getTime() - start.getTime();
-        if (time >= 8 * 1000 * 60 * 60) {
-          return {
-            style: {
-              backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
-            },
-          };
-        }
-        if (time < 7.83 * 1000 * 60 * 60) {
-          return {
-            style: {
-              backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
-            },
-          };
-        }
-      }
+  const handleRangeChange = (range: any) => {
+    let start, end;
+    if (Array.isArray(range)) {
+      // The week view returns an array of dates
+      start = range[0];
+      end = range[range.length - 1];
+    } else {
+      // The month view and day view return an object
+      start = range.start;
+      end = range.end;
+    }
 
-      return {};
-    },
-    []
-  );
+    end.setHours(23, 59, 59, 999);
+
+    const dateStringStart = start.toISOString();
+    const dateStringEnd = end.toISOString();
+    handleTimeRangeChange(dateStringStart, dateStringEnd);
+  };
+
+  // const eventStyleGetter = useCallback(
+  //   (
+  //     event: any,
+  //     start: Date,
+  //     end: Date
+  //     // isSelected: boolean
+  //   ) => {
+  //     if (event.title === "Working Time") {
+  //       const time = end.getTime() - start.getTime();
+  //       if (time >= 8 * 1000 * 60 * 60) {
+  //         return {
+  //           style: {
+  //             backgroundColor: "rgba(0, 255, 0, 0.6)", // Green color with 30% opacity
+  //           },
+  //         };
+  //       }
+  //       if (time < 7.83 * 1000 * 60 * 60) {
+  //         return {
+  //           style: {
+  //             backgroundColor: "rgba(255, 0, 0, 0.6)", // Red color with 30% opacity
+  //           },
+  //         };
+  //       }
+  //     }
+
+  //     return {};
+  //   },
+  //   []
+  // );
 
   return (
     <>
@@ -169,9 +206,10 @@ const MyCalendar = ({ user }: Props) => {
             agenda: true,
           }}
           backgroundEvents={backgroundEvents} // Set background events
-          eventPropGetter={eventStyleGetter}
+          // eventPropGetter={eventStyleGetter}
           onSelectEvent={handleEventSelect}
           onSelectSlot={handleSlotSelect}
+          onRangeChange={handleRangeChange}
           selectable
         />
       </div>
@@ -179,7 +217,6 @@ const MyCalendar = ({ user }: Props) => {
         isEventDialogOpen={isEventDialogOpen}
         closeEventDialog={closeEventDialog}
         selectedEvent={selectedEvent}
-        userId={user?._id}
       />
     </>
   );

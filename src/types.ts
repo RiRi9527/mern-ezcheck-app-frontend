@@ -5,6 +5,7 @@ export type User = {
   firstName: string;
   lastName: string;
   position: string;
+  status: string;
   hourlyWage: number;
   isAdmin: boolean;
   imageUrl: string;
@@ -21,9 +22,28 @@ export type UserSchedule = {
   sunday?: { checkIn: string; checkOut: string };
 };
 
+export type Users = {
+  _id: string;
+  firstName: string;
+  imageUrl: string;
+  status: string;
+};
+
 export type EventData = {
   _id?: string;
   title: string;
-  startTime?: string;
-  endTime?: string;
+  start?: string;
+  end?: string;
+};
+
+export type BackgroundEvent = {
+  title: string;
+  start: Date;
+  end: Date;
+  allDay: boolean;
+};
+
+export type totalHrs = {
+  hours: string;
+  minutes: string;
 };

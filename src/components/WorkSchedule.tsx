@@ -1,14 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { UserSchedule, User } from "@/types";
+import { UserSchedule } from "@/types";
 import { useUpdateSchedule } from "@/api/AccountApi";
 import { Separator } from "./ui/separator";
-
-type Props = {
-  user: User | undefined;
-  refetch: () => void;
-};
+import { useAppContext } from "@/content/AppContext";
 
 type Editing = {
   day: string | null;
@@ -53,8 +49,10 @@ const initialSchedule = {
   Sat: { checkIn: "10:00", checkOut: "14:00", disable: true },
 };
 
-const WorkSchedule = ({ user, refetch }: Props) => {
+const WorkSchedule = () => {
   const [schedule, setSchedule] = useState<Schedule>(initialSchedule);
+
+  const { user, refetchUser: refetch } = useAppContext();
 
   useEffect(() => {
     let updateSchedule = {

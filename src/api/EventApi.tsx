@@ -1,59 +1,36 @@
-import { EventData } from "@/types";
+import { EventData, totalHrs } from "@/types";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useGetEvents = (userId?: string) => {
+export const useGetEvents = (userId?: string, start?: string, end?: string) => {
   const getEventsRequest = async (): Promise<EventData[]> => {
-    const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
-      //   credentials: "include",
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/api/events/get/${userId}/${start}/${end}`,
+      {
+        //   credentials: "include",
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to get event");
     }
-    const eventData = await response.json();
 
-    const formattedEventData = eventData.map((event: any) => {
-      switch (true) {
-        case !event.endTime && event.title === "Working Time":
-          const start = new Date(event.startTime);
-          const end = new Date();
-          return {
-            ...event,
-            start,
-            end,
-          };
-        case !event.endTime || !event.startTime:
-          return {
-            ...event,
-            start: new Date(event.startTime || event.endTime || ""),
-            end: new Date(event.startTime || event.endTime || ""), // 如果没有结束时间，开始和结束时间相同
-          };
-        default:
-          return {
-            ...event,
-            start: new Date(event.startTime),
-            end: new Date(event.endTime),
-          };
-      }
-    });
-
-    return formattedEventData;
+    return response.json();
   };
-  const {
-    data: events,
-
-    refetch,
-  } = useQuery("fetchEvent", getEventsRequest, {
-    enabled: !!userId,
-  });
+  const { data: events, refetch } = useQuery(
+    ["fetchEvent", start, end, userId],
+    getEventsRequest,
+    {
+      enabled: !!userId,
+    }
+  );
 
   return { events, refetch };
 };
 
 export const useCreateEvent = (userId?: string) => {
-  const createEventRequest = async (eventData: EventData): Promise<string> => {
+  const createEventRequest = async (eventData: EventData): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +50,7 @@ export const useCreateEvent = (userId?: string) => {
     isSuccess,
     error,
     reset,
-    data: eventId,
+    data,
   } = useMutation(createEventRequest);
 
   if (isSuccess) {
@@ -86,11 +63,11 @@ export const useCreateEvent = (userId?: string) => {
     reset();
   }
 
-  return { createEvent, isLoading, isSuccess, eventId };
+  return { createEvent, isLoading, isSuccess, data };
 };
 
 export const useEditEvent = (userId?: string) => {
-  const editEventRequest = async (eventData: EventData): Promise<string> => {
+  const editEventRequest = async (eventData: EventData): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/api/events/${userId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -110,7 +87,6 @@ export const useEditEvent = (userId?: string) => {
     isSuccess,
     error,
     reset,
-    data: eventId,
   } = useMutation(editEventRequest);
 
   if (isSuccess) {
@@ -123,7 +99,7 @@ export const useEditEvent = (userId?: string) => {
     reset();
   }
 
-  return { editEvent, isLoading, isSuccess, eventId };
+  return { editEvent, isLoading, isSuccess };
 };
 
 export const useDeleteEvent = (userId?: string) => {
@@ -245,4 +221,32 @@ export const useCreateCheckOut = (userId?: string) => {
   }
 
   return { createCheckOutEvent, isLoading, isSuccess };
+};
+
+export const useGetHrs = (userId?: string) => {
+  const getEventsHrs = async (): Promise<totalHrs> => {
+    const date = new Date();
+    const dateString = date.toISOString();
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/events/hrs/${userId}/${dateString}`,
+      {
+        //   credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get hrs");
+    }
+
+    return response.json();
+  };
+  const { data: hrs, refetch: refetchHrs } = useQuery(
+    ["fetchHrs", userId],
+    getEventsHrs,
+    {
+      enabled: !!userId,
+    }
+  );
+
+  return { hrs, refetchHrs };
 };

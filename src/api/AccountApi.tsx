@@ -21,7 +21,7 @@ export const useGetAccount = (userId?: string) => {
     isLoading,
     isError,
     refetch,
-  } = useQuery("fetchUser", getUserRequest, {
+  } = useQuery(["fetchUser", userId], getUserRequest, {
     enabled: !!userId,
   });
 
@@ -141,4 +141,41 @@ export const useUpdateSchedule = (userId?: string) => {
   }
 
   return { isLoading, updateSchedule, isSuccess };
+};
+
+export const useUpdateStatus = (userId?: string) => {
+  const updateStatusRequest = async (status: string): Promise<string> => {
+    const response = await fetch(`${API_BASE_URL}/api/users/${userId}/status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update status");
+    }
+    return response.json();
+  };
+
+  const {
+    mutateAsync: updateStatus,
+    isLoading,
+    isSuccess,
+    error,
+    reset,
+  } = useMutation(updateStatusRequest);
+
+  if (isSuccess) {
+    toast.success("Status updated!");
+    reset();
+  }
+
+  if (error) {
+    toast.error("Unable to update status");
+    reset();
+  }
+
+  return { isLoading, updateStatus, isSuccess };
 };

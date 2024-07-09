@@ -1,13 +1,10 @@
 import { useUpdateAccount } from "@/api/AccountApi";
+import { useAppContext } from "@/content/AppContext";
 import ManageAccountForm from "@/forms/manage-account-form/ManageAccountForm";
-import { User } from "@/types";
 
-type Props = {
-  user?: User;
-  handleClickAndRefetch: (userId: string) => void;
-};
+const EmployeeInfoRightBar = () => {
+  const { user } = useAppContext();
 
-const EmployeeInfoRightBar = ({ user, handleClickAndRefetch }: Props) => {
   const { isLoading: isUpdateLoading, updateAccount } = useUpdateAccount(
     user?._id
   );
@@ -19,7 +16,6 @@ const EmployeeInfoRightBar = ({ user, handleClickAndRefetch }: Props) => {
             account={user}
             onSave={updateAccount}
             isLoading={isUpdateLoading}
-            handleClickAndRefetch={handleClickAndRefetch}
           />
         </div>
       )}

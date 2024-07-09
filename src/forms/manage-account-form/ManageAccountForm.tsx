@@ -19,14 +19,14 @@ type Props = {
   onSave: any;
   isLoading: boolean;
   isSuccess?: boolean;
-  handleClickAndRefetch: (userId: string) => void;
+  handleUserCreateDialog?: () => void;
 };
 
 const ManageAccountForm = ({
   onSave,
   isLoading,
   account,
-  handleClickAndRefetch,
+  handleUserCreateDialog,
 }: Props) => {
   const { auth } = useAppContext();
   const disable =
@@ -46,6 +46,8 @@ const ManageAccountForm = ({
     }
   }, [account, reset]);
 
+  const { handleUserIdChange, refetchUsers } = useAppContext();
+
   const existingImageUrls = watch("imageUrl");
 
   const onSubmit = async (formDataJson: AccountFromData) => {
@@ -61,8 +63,10 @@ const ManageAccountForm = ({
       formData.append("imageFile", imageFile);
     }
     const fetchedUserId = await onSave(formData);
-    console.log(fetchedUserId);
-    handleClickAndRefetch(fetchedUserId);
+
+    handleUserIdChange(fetchedUserId);
+    refetchUsers();
+    handleUserCreateDialog?.();
   };
 
   const [selectedFile, setSelectedFile] = useState(null);

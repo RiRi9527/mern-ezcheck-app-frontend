@@ -5,13 +5,11 @@ import { useCreateAccount } from "@/api/AccountApi";
 interface EventDialogProps {
   isUserCreateDialog: boolean; // Define the type of isEventDialogOpen
   handleUserCreateDialog: () => void;
-  handleClickAndRefetch: (userId: string) => void;
 }
 
 const UserCreateDialog: React.FC<EventDialogProps> = ({
   isUserCreateDialog,
   handleUserCreateDialog,
-  handleClickAndRefetch,
 }) => {
   const {
     createAccount,
@@ -27,7 +25,7 @@ const UserCreateDialog: React.FC<EventDialogProps> = ({
             onSave={createAccount}
             isLoading={isCreateLoading}
             isSuccess={isSuccess}
-            handleClickAndRefetch={handleClickAndRefetch}
+            handleUserCreateDialog={handleUserCreateDialog}
           />
         </div>
       </DialogContent>
