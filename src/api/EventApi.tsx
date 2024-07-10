@@ -223,7 +223,7 @@ export const useCreateCheckOut = (userId?: string) => {
   return { createCheckOutEvent, isLoading, isSuccess };
 };
 
-export const useGetHrs = (userId?: string, payrollDate?: number) => {
+export const useGetHrs = (userId?: string, payrollDate?: string) => {
   const getEventsHrs = async (): Promise<totalHrs> => {
     const response = await fetch(
       `${API_BASE_URL}/api/events/hrs/${userId}/${payrollDate}`,

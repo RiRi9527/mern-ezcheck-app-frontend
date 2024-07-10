@@ -5,7 +5,14 @@ import { useCreateCheckIn, useCreateCheckOut } from "@/api/EventApi";
 import { useEffect, useState } from "react";
 
 const CheckInfo = () => {
-  const { user, refetchEvents, events, refetchHrs, hrs } = useAppContext();
+  const {
+    user,
+    refetchEvents,
+    events,
+    refetchHrs,
+    hrs,
+    handlePayrollDateChange,
+  } = useAppContext();
   const { createCheckInEvent } = useCreateCheckIn(user?._id);
   const { createCheckOutEvent } = useCreateCheckOut(user?._id);
 
@@ -87,6 +94,11 @@ const CheckInfo = () => {
           <p>Check out at: {filteredEvent?.end}</p>
         </div>
       </div>
+      <Button
+        onClick={() => handlePayrollDateChange("2024-07-05T14:37:48.507Z")}
+      >
+        -1
+      </Button>
     </Card>
   );
 };
