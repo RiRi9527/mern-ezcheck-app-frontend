@@ -5,14 +5,7 @@ import { useCreateCheckIn, useCreateCheckOut } from "@/api/EventApi";
 import { useEffect, useState } from "react";
 
 const CheckInfo = () => {
-  const {
-    user,
-    refetchEvents,
-    events,
-    refetchHrs,
-    hrs,
-    handlePayrollDateChange,
-  } = useAppContext();
+  const { user, refetchEvents, events, refetchHrs, hrs } = useAppContext();
   const { createCheckInEvent } = useCreateCheckIn(user?._id);
   const { createCheckOutEvent } = useCreateCheckOut(user?._id);
 
@@ -85,20 +78,22 @@ const CheckInfo = () => {
           </Button>
         )}
       </div>
-      <div className="flex flex-col justify-center items-center border-t">
+      <div className="relative flex flex-col justify-center items-center border-t">
         <div>
           <p>
             Total Hrs: {hrs?.hours}hrs {hrs?.minutes}mins
           </p>
           <p>Check in at: {filteredEvent?.start}</p>
           <p>Check out at: {filteredEvent?.end}</p>
+
+          <Button
+            variant="ghost"
+            className="absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-green-300 text-green-500"
+          >
+            Payroll
+          </Button>
         </div>
       </div>
-      <Button
-        onClick={() => handlePayrollDateChange("2024-07-05T14:37:48.507Z")}
-      >
-        -1
-      </Button>
     </Card>
   );
 };
