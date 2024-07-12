@@ -5,7 +5,8 @@ import { useCreateCheckIn, useCreateCheckOut } from "@/api/EventApi";
 import { useEffect, useState } from "react";
 
 const CheckInfo = () => {
-  const { user, refetchEvents, events, refetchHrs, hrs } = useAppContext();
+  const { user, refetchEvents, events, refetchPayroll, payroll } =
+    useAppContext();
   const { createCheckInEvent } = useCreateCheckIn(user?._id);
   const { createCheckOutEvent } = useCreateCheckOut(user?._id);
 
@@ -62,7 +63,7 @@ const CheckInfo = () => {
     const currentTimeString = new Date().toISOString();
     await createCheckOutEvent({ title, end: currentTimeString });
     refetchEvents();
-    refetchHrs();
+    refetchPayroll();
   };
 
   return (
@@ -81,7 +82,7 @@ const CheckInfo = () => {
       <div className="relative flex flex-col justify-center items-center border-t">
         <div>
           <p>
-            Total Hrs: {hrs?.hours}hrs {hrs?.minutes}mins
+            Total Hrs: {payroll?.hours}hrs {payroll?.minutes}mins
           </p>
           <p>Check in at: {filteredEvent?.start}</p>
           <p>Check out at: {filteredEvent?.end}</p>

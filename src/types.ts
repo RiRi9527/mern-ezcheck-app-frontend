@@ -43,7 +43,8 @@ export type BackgroundEvent = {
   allDay: boolean;
 };
 
-export type totalHrs = {
+export type Payroll = {
   hours: string;
   minutes: string;
+  payroll?: object;
 };

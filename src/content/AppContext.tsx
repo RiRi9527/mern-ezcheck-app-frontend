@@ -1,7 +1,7 @@
 import { useGetAccount } from "@/api/AccountApi";
 import { useGetAllUsers, useValidateToken } from "@/api/AuthApi";
-import { useGetEvents, useGetHrs } from "@/api/EventApi";
-import { EventData, User, Users, totalHrs } from "@/types";
+import { useGetEvents, usePayroll } from "@/api/EventApi";
+import { EventData, User, Users, Payroll } from "@/types";
 import React, { useContext, useEffect, useState } from "react";
 
 type AppContext = {
@@ -10,14 +10,14 @@ type AppContext = {
   user: User | undefined;
   users: Users[] | undefined;
   events: EventData[] | undefined;
-  hrs: totalHrs | undefined;
+  payroll: Payroll | undefined;
   handleUserIdChange: (userId: string) => void;
   handleTimeRangeChange: (start: string, end: string) => void;
   handlePayrollDateChange: (dateString: string) => void;
   refetchUser: any;
   refetchUsers: any;
   refetchEvents: any;
-  refetchHrs: any;
+  refetchPayroll: any;
 };
 
 type TimeRange = {
@@ -76,7 +76,11 @@ export const AppContextProvider = ({
     timeRange?.start,
     timeRange?.end
   );
-  const { hrs, refetchHrs } = useGetHrs(userId, payrollDate);
+  const { payroll, refetchPayroll } = usePayroll(
+    userId,
+    payrollDate,
+    payrollDate
+  );
 
   const handleUserIdChange = (userId: string) => {
     if (isError) {
@@ -104,11 +108,11 @@ export const AppContextProvider = ({
         user,
         users,
         events,
-        hrs,
+        payroll,
         refetchUser,
         refetchUsers,
         refetchEvents,
-        refetchHrs,
+        refetchPayroll,
         handleUserIdChange,
         handleTimeRangeChange,
         handlePayrollDateChange,

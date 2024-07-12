@@ -1,4 +1,4 @@
-import { EventData, totalHrs } from "@/types";
+import { EventData, Payroll } from "@/types";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
@@ -223,10 +223,39 @@ export const useCreateCheckOut = (userId?: string) => {
   return { createCheckOutEvent, isLoading, isSuccess };
 };
 
-export const useGetHrs = (userId?: string, payrollDate?: string) => {
-  const getEventsHrs = async (): Promise<totalHrs> => {
+// export const useGetHrs = (userId?: string, payrollDate?: string) => {
+//   const getEventsHrs = async (): Promise<totalHrs> => {
+//     const response = await fetch(
+//       `${API_BASE_URL}/api/events/hrs/${userId}/${payrollDate}`,
+//       {
+//         //   credentials: "include",
+//       }
+//     );
+//     if (!response.ok) {
+//       throw new Error("Failed to get hrs");
+//     }
+
+//     return response.json();
+//   };
+//   const { data: hrs, refetch: refetchHrs } = useQuery(
+//     ["fetchHrs", userId, payrollDate],
+//     getEventsHrs,
+//     {
+//       enabled: !!userId,
+//     }
+//   );
+
+//   return { hrs, refetchHrs };
+// };
+
+export const usePayroll = (
+  userId?: string,
+  payrollDate?: string,
+  payrollString?: string
+) => {
+  const getPayroll = async (): Promise<Payroll> => {
     const response = await fetch(
-      `${API_BASE_URL}/api/events/hrs/${userId}/${payrollDate}`,
+      `${API_BASE_URL}/api/events/pay/${userId}/${payrollDate}/${payrollString}`,
       {
         //   credentials: "include",
       }
@@ -237,13 +266,13 @@ export const useGetHrs = (userId?: string, payrollDate?: string) => {
 
     return response.json();
   };
-  const { data: hrs, refetch: refetchHrs } = useQuery(
-    ["fetchHrs", userId, payrollDate],
-    getEventsHrs,
+  const { data: payroll, refetch: refetchPayroll } = useQuery(
+    ["fetchPayroll", userId, payrollDate],
+    getPayroll,
     {
       enabled: !!userId,
     }
   );
 
-  return { hrs, refetchHrs };
+  return { payroll, refetchPayroll };
 };
