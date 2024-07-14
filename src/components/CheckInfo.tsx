@@ -1,16 +1,29 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { useAppContext } from "@/content/AppContext";
-import { useCreateCheckIn, useCreateCheckOut } from "@/api/EventApi";
-import { useEffect, useState } from "react";
+import {
+  useCreateCheckIn,
+  useCreateCheckOut,
+  usePayroll,
+} from "@/api/EventApi";
+import { useEffect, useMemo, useState } from "react";
 
 const CheckInfo = () => {
-  const { user, refetchEvents, events, refetchPayroll, payroll } =
-    useAppContext();
+  const { user, refetchEvents, events } = useAppContext();
   const { createCheckInEvent } = useCreateCheckIn(user?._id);
   const { createCheckOutEvent } = useCreateCheckOut(user?._id);
 
   const [filteredEvent, setFilteredEvent] = useState<any>();
+
+  const payrollDateString = useMemo(() => {
+    const today = new Date();
+    return today.toISOString();
+  }, []);
+  const { payroll, refetchPayroll } = usePayroll(
+    user?._id,
+    payrollDateString,
+    "today"
+  );
 
   useEffect(() => {
     const today = new Date().toDateString();
