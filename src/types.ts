@@ -46,5 +46,7 @@ export type BackgroundEvent = {
 export type Payroll = {
   hours: string;
   minutes: string;
-  payroll?: object;
+  weekStartDateString?: string;
+  weekEndDateString?: string;
+  payRoll?: [EventData];
 };
