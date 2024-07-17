@@ -1,45 +1,17 @@
 import { usePayroll } from "@/api/EventApi";
 import { useAppContext } from "@/content/AppContext";
-import { useEffect, useState } from "react";
 
 const PayrollPage = () => {
   const { user } = useAppContext();
-  const [totalHours, setTotalHours] = useState(0);
-  const [totalMinutes, setTotalMinutes] = useState(0);
-
   const { payroll } = usePayroll(
     user?._id,
     "2024-07-13T12:34:56.789Z",
     "payroll"
   );
 
-  useEffect(() => {
-    if (payroll?.payRoll) {
-      let hours = 0;
-      let minutes = 0;
-
-      payroll.payRoll.forEach((event) => {
-        if (event.start && event.end) {
-          const start = new Date(event.start);
-          const end = new Date(event.end);
-          const diffMilliseconds = end.getTime() - start.getTime();
-          const diffMinutes = diffMilliseconds / (1000 * 60);
-          hours += Math.floor(diffMinutes / 60);
-          minutes += Math.floor(diffMinutes % 60);
-        }
-      });
-
-      setTotalHours(hours);
-      setTotalMinutes(minutes);
-    }
-  }, [payroll]);
-
-  console.log(payroll);
-
   const totalPay =
     (user?.hourlyWage || 0) * Number(payroll?.hours || 0) +
     ((user?.hourlyWage || 0) * Number(payroll?.minutes || 0)) / 60;
-  console.log(`Total pay for ${user?.firstName}: ${totalPay}`);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -106,7 +78,8 @@ const PayrollPage = () => {
                   colSpan={3}
                   className="text-right border-t border-gray-400 px-4 py-2 table-cell col-span-3"
                 >
-                  Total Working Time: {totalHours} hours {totalMinutes} minutes
+                  Total Working Time: {payroll.hours} hours {payroll.minutes}{" "}
+                  minutes
                 </td>
               </tr>
             </tfoot>
