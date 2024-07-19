@@ -49,7 +49,7 @@ const combineDateTime = (outputDate: string, outputTime: string) => {
 };
 
 const EventForm = ({ event, closeEventDialog }: Props) => {
-  const { user, refetchEvents, refetchHrs } = useAppContext();
+  const { user, refetchEvents } = useAppContext();
 
   // Split the event start and end times into date and time parts
   const startDateTime = event?.start
@@ -93,13 +93,13 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
       const response = await editEvent(eventData);
       refetchEvents();
       if (response?.title === "Working Time") {
-        refetchHrs();
+        // refetchHrs();
       }
     } else {
       const response = await createEvent(eventData);
       refetchEvents();
       if (response?.title === "Working Time") {
-        refetchHrs();
+        // refetchHrs();
       }
     }
 
@@ -113,7 +113,7 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
       await deleteEvent(event._id);
       refetchEvents();
       if (event.title === "Working Time") {
-        refetchHrs();
+        // refetchHrs();
       }
     }
     setTimeout(() => {
