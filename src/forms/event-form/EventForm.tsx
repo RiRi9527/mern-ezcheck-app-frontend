@@ -113,7 +113,7 @@ const EventForm = ({ event, closeEventDialog }: Props) => {
       await deleteEvent(event._id);
       refetchEvents();
       if (event.title === "Working Time") {
-        // refetchHrs();
+        refetchHrs();
       }
     }
     setTimeout(() => {
