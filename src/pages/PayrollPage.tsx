@@ -5,13 +5,15 @@ const PayrollPage = () => {
   const { user } = useAppContext();
   const { payroll } = usePayroll(
     user?._id,
-    "2024-07-13T12:34:56.789Z",
+    "2024-07-23T12:34:56.789Z",
     "payroll"
   );
 
   const totalPay =
     (user?.hourlyWage || 0) * Number(payroll?.hours || 0) +
     ((user?.hourlyWage || 0) * Number(payroll?.minutes || 0)) / 60;
+
+  let previousStart: string | null = null;
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -42,35 +44,40 @@ const PayrollPage = () => {
               </tr>
             </thead>
             <tbody>
-              {payroll.payRoll.map((event, index) => (
-                <tr key={index}>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {event.start
-                      ? new Date(event.start).toLocaleDateString("en-US", {
-                          month: "2-digit",
-                          day: "2-digit",
-                          year: "numeric",
-                        })
-                      : "Date not available"}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {event.start
-                      ? new Date(event.start).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "Start time not available"}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {event.end
-                      ? new Date(event.end).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "End time not available"}
-                  </td>
-                </tr>
-              ))}
+              {payroll.payRoll.map((event, index) => {
+                const showDate = previousStart !== event.start;
+                previousStart = event.start || null; // Update previousStart for next comparison
+
+                return (
+                  <tr key={index}>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {event.start && showDate
+                        ? new Date(event.start).toLocaleDateString("en-US", {
+                            month: "2-digit",
+                            day: "2-digit",
+                            year: "numeric",
+                          })
+                        : ""}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {event.start
+                        ? new Date(event.start).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "Start time not available"}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {event.end
+                        ? new Date(event.end).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "End time not available"}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
             <tfoot>
               <tr>
