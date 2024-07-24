@@ -1,8 +1,8 @@
 import { useGetAccount } from "@/api/AccountApi";
 import { useGetAllUsers, useValidateToken } from "@/api/AuthApi";
-import { useGetEvents } from "@/api/EventApi";
-import { EventData, User, Users } from "@/types";
-import React, { useContext, useEffect, useState } from "react";
+import { useGetEvents, usePayroll } from "@/api/EventApi";
+import { EventData, Payroll, User, Users } from "@/types";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 type AppContext = {
   isLoggedIn: boolean;
@@ -10,11 +10,13 @@ type AppContext = {
   user: User | undefined;
   users: Users[] | undefined;
   events: EventData[] | undefined;
+  payroll: Payroll | undefined;
   handleUserIdChange: (userId: string) => void;
   handleTimeRangeChange: (start: string, end: string) => void;
   refetchUser: any;
   refetchUsers: any;
   refetchEvents: any;
+  refetchPayroll: any;
 };
 
 type TimeRange = {
@@ -69,6 +71,17 @@ export const AppContextProvider = ({
     timeRange?.end
   );
 
+  const payrollDateString = useMemo(() => {
+    const today = new Date();
+    return today.toISOString();
+  }, []);
+
+  const { payroll, refetchPayroll } = usePayroll(
+    user?._id,
+    payrollDateString,
+    "today"
+  );
+
   const handleUserIdChange = (userId: string) => {
     if (isError) {
       return;
@@ -91,11 +104,13 @@ export const AppContextProvider = ({
         user,
         users,
         events,
+        payroll,
         refetchUser,
         refetchUsers,
         refetchEvents,
         handleUserIdChange,
         handleTimeRangeChange,
+        refetchPayroll,
       }}
     >
       {children}
