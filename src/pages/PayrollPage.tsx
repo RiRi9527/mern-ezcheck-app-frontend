@@ -13,7 +13,7 @@ const PayrollPage = () => {
     (user?.hourlyWage || 0) * Number(payroll?.hours || 0) +
     ((user?.hourlyWage || 0) * Number(payroll?.minutes || 0)) / 60;
 
-  let previousStart: string | null = null;
+  let previousStart: string = "1";
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -45,8 +45,16 @@ const PayrollPage = () => {
             </thead>
             <tbody>
               {payroll.payRoll.map((event, index) => {
-                const showDate = previousStart !== event.start;
-                previousStart = event.start || null; // Update previousStart for next comparison
+                const xxx = previousStart.split("T")[0];
+                const yyy = event?.start?.split("T")[0];
+
+                const showDate = xxx !== yyy;
+
+                previousStart = event.start || "1"; // Update previousStart for next comparison
+
+                console.log(xxx);
+                console.log(yyy);
+                console.log(previousStart);
 
                 return (
                   <tr key={index}>
