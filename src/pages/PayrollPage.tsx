@@ -35,7 +35,7 @@ const PayrollPage = () => {
             })}
         </h1>
         {payroll?.payRoll ? (
-          <table className="table-auto w-full border-collapse border border-gray-400">
+          <table className="table-auto w-full border-collapse border border-gray-300">
             <thead>
               <tr>
                 <th className="border border-gray-300 px-4 py-2">Date</th>
@@ -58,7 +58,13 @@ const PayrollPage = () => {
 
                 return (
                   <tr key={index}>
-                    <td className="border border-gray-300 px-4 py-2">
+                    <td
+                      className={
+                        showDate
+                          ? "border-l border-r border-t border-gray-300 px-4 py-2"
+                          : ""
+                      }
+                    >
                       {event.start && showDate
                         ? new Date(event.start).toLocaleDateString("en-US", {
                             month: "2-digit",
@@ -67,6 +73,7 @@ const PayrollPage = () => {
                           })
                         : ""}
                     </td>
+
                     <td className="border border-gray-300 px-4 py-2">
                       {event.start
                         ? new Date(event.start).toLocaleTimeString([], {
@@ -91,7 +98,7 @@ const PayrollPage = () => {
               <tr>
                 <td
                   colSpan={3}
-                  className="text-right border-t border-gray-400 px-4 py-2 table-cell col-span-3"
+                  className="text-right border-t border-gray-300 px-4 py-2 table-cell col-span-3"
                 >
                   Total Working Time: {payroll.hours} hours {payroll.minutes}{" "}
                   minutes
