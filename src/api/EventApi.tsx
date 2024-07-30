@@ -9,7 +9,7 @@ export const useGetEvents = (userId?: string, start?: string, end?: string) => {
     const response = await fetch(
       `${API_BASE_URL}/api/events/get/${userId}/${start}/${end}`,
       {
-        //   credentials: "include",
+        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -37,7 +37,7 @@ export const useCreateEvent = (userId?: string) => {
       },
       method: "POST",
       body: JSON.stringify(eventData),
-      //   credentials: "include",
+      credentials: "include",
     });
     if (!response.ok) {
       throw new Error("Failed to create event");
@@ -74,7 +74,7 @@ export const useEditEvent = (userId?: string) => {
       },
       method: "PUT",
       body: JSON.stringify(eventData),
-      //   credentials: "include",
+      credentials: "include",
     });
     if (!response.ok) {
       throw new Error("Failed to edit event");
@@ -110,7 +110,7 @@ export const useDeleteEvent = (userId?: string) => {
       },
       method: "DELETE",
       body: JSON.stringify({ eventId }),
-      //   credentials: "include",
+      credentials: "include",
     });
     if (!response.ok) {
       throw new Error("Failed to delete event");
@@ -151,7 +151,7 @@ export const useCreateCheckIn = (userId?: string) => {
         },
         method: "POST",
         body: JSON.stringify(eventData),
-        //   credentials: "include",
+        credentials: "include",
       }
     );
 
@@ -194,7 +194,7 @@ export const useCreateCheckOut = (userId?: string) => {
         },
         method: "PUT",
         body: JSON.stringify(eventData),
-        //   credentials: "include",
+        credentials: "include",
       }
     );
     if (!response.ok) {
@@ -232,7 +232,7 @@ export const usePayroll = (
     const response = await fetch(
       `${API_BASE_URL}/api/events/pay/${userId}/${payrollDate}/${payrollString}`,
       {
-        //   credentials: "include",
+        credentials: "include",
       }
     );
     if (!response.ok) {
