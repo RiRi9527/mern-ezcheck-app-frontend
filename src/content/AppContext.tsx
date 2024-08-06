@@ -17,6 +17,7 @@ type AppContext = {
   refetchUsers: any;
   refetchEvents: any;
   refetchPayroll: any;
+  payrollDateString: string;
 };
 
 type TimeRange = {
@@ -111,6 +112,7 @@ export const AppContextProvider = ({
         handleUserIdChange,
         handleTimeRangeChange,
         refetchPayroll,
+        payrollDateString,
       }}
     >
       {children}

@@ -1,13 +1,25 @@
 import { usePayroll } from "@/api/EventApi";
 import { useAppContext } from "@/content/AppContext";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useState } from "react";
 
 const PayrollPage = () => {
-  const { user } = useAppContext();
-  const { payroll } = usePayroll(
-    user?._id,
-    "2024-07-23T12:34:56.789Z",
-    "payroll"
-  );
+  const { user, payrollDateString } = useAppContext();
+
+  const [date, setDate] = useState<Date>();
+
+  const payrollDate = date ? date.toISOString() : payrollDateString;
+  const { payroll } = usePayroll(user?._id, payrollDate, "payroll");
 
   const totalPay =
     (user?.hourlyWage || 0) * Number(payroll?.hours || 0) +
@@ -34,6 +46,28 @@ const PayrollPage = () => {
               year: "numeric",
             })}
         </h1>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-[280px] justify-start text-left font-normal mb-4",
+                !date && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
         {payroll?.payRoll ? (
           <table className="table-auto w-full border-collapse border border-gray-300">
             <thead>
