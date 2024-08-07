@@ -1,5 +1,4 @@
 import { usePayroll } from "@/api/EventApi";
-import { useAppContext } from "@/content/AppContext";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -11,15 +10,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useGetAccount } from "@/api/AccountApi";
 
 const PayrollPage = () => {
-  const { user, payrollDateString } = useAppContext();
+  const { userId } = useParams();
+
+  const { user } = useGetAccount(userId);
 
   const [date, setDate] = useState<Date>();
 
-  const payrollDate = date ? date.toISOString() : payrollDateString;
-  const { payroll } = usePayroll(user?._id, payrollDate, "payroll");
+  useEffect(() => {
+    if (!date) {
+      setDate(new Date()); // 设置为初始日期
+    }
+  }, []);
+
+  const { payroll } = usePayroll(userId, date?.toISOString(), "payroll");
 
   const totalPay =
     (user?.hourlyWage || 0) * Number(payroll?.hours || 0) +
@@ -85,10 +93,6 @@ const PayrollPage = () => {
                 const showDate = xxx !== yyy;
 
                 previousStart = event.start || "1"; // Update previousStart for next comparison
-
-                console.log(xxx);
-                console.log(yyy);
-                console.log(previousStart);
 
                 return (
                   <tr key={index}>

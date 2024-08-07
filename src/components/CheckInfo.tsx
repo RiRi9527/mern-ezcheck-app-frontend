@@ -5,7 +5,7 @@ import { useCreateCheckIn, useCreateCheckOut } from "@/api/EventApi";
 import { useEffect, useState } from "react";
 
 const CheckInfo = () => {
-  const { user, refetchEvents, events, payroll, refetchPayroll } =
+  const { user, refetchEvents, events, payroll, refetchPayroll, userId } =
     useAppContext();
   const { createCheckInEvent } = useCreateCheckIn(user?._id);
   const { createCheckOutEvent } = useCreateCheckOut(user?._id);
@@ -66,6 +66,10 @@ const CheckInfo = () => {
     refetchPayroll();
   };
 
+  const handlePayrollClick = () => {
+    window.open(`main/${userId}/payroll`, "_blank");
+  };
+
   return (
     <Card className="h-full w-full grid grid-rows-2">
       <div className=" relative flex flex-col items-center justify-center border-b">
@@ -90,6 +94,7 @@ const CheckInfo = () => {
           <Button
             variant="ghost"
             className="absolute right-0 bottom-0 w-16 h-8 border-2 hover:bg-green-300 text-green-500"
+            onClick={handlePayrollClick}
           >
             Payroll
           </Button>

@@ -11,6 +11,7 @@ type AppContext = {
   users: Users[] | undefined;
   events: EventData[] | undefined;
   payroll: Payroll | undefined;
+  userId: string | undefined;
   handleUserIdChange: (userId: string) => void;
   handleTimeRangeChange: (start: string, end: string) => void;
   refetchUser: any;
@@ -106,6 +107,7 @@ export const AppContextProvider = ({
         users,
         events,
         payroll,
+        userId,
         refetchUser,
         refetchUsers,
         refetchEvents,
