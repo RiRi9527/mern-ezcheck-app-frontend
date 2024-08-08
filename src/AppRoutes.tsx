@@ -13,7 +13,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={isLoggedIn ? <MainPage /> : <HomePage />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/main/:userId" element={<MainPage />} />
+        <Route path="/main" element={<MainPage />} />
         <Route path="/main/:userId/payroll" element={<PayrollPage />} />
       </Route>
       <Route element={<ProtectedRoute />}></Route>

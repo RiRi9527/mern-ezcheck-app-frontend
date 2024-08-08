@@ -57,10 +57,10 @@ export const useLogin = () => {
     error,
     reset,
   } = useMutation(loginRequest, {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries("validateToken");
       toast.success("User login!");
-      navigate(`/main/${data}`);
+      navigate(`/main`);
     },
   });
 
