@@ -182,8 +182,13 @@ const ManageAccountForm = ({
           disabled={disable}
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("hourlyWage", { required: "This field is required" })}
-          defaultValue="19"
+          defaultValue={
+            account?.hourlyWage !== undefined ? account.hourlyWage : "*****"
+          }
         >
+          <option value="*****" disabled hidden>
+            *****
+          </option>
           {[...Array(12).keys()].map((value) => (
             <option key={value + 19} value={value + 19}>
               {value + 19}
