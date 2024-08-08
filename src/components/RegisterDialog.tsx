@@ -13,7 +13,6 @@ const RegisterDialog = () => {
     createAccount,
     isLoading: isCreateLoading,
     isSuccess,
-    userId,
   } = useCreateAccount();
 
   return (
@@ -32,7 +31,6 @@ const RegisterDialog = () => {
             onSave={createAccount}
             isLoading={isCreateLoading}
             isSuccess={isSuccess}
-            userId={userId}
           />
         </div>
       </DialogContent>

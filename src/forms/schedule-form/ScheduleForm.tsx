@@ -23,10 +23,10 @@ export type ScheduleFromData = {
 const ScheduleForm = ({ currentUserSchedule }: Props) => {
   const {
     register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    watch,
+    // handleSubmit,
+    // formState: { errors },
+    // reset,
+    // watch,
   } = useForm<ScheduleFromData>({
     defaultValues: currentUserSchedule || initialSchedule,
   });
