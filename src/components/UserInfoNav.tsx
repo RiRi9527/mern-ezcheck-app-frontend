@@ -14,7 +14,10 @@ type Props = {
 const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
   const [show, setShow] = useState(false);
 
-  const { users, handleUserIdChange, refetchUsers } = useAppContext();
+  const { auth, users, handleUserIdChange, refetchUsers } = useAppContext();
+
+  const disable =
+    auth?.position !== "CEO" && auth?.position !== "Office Manager";
 
   const handleClickAndRefetchUser = async (userId: string) => {
     handleUserIdChange(userId);
@@ -46,7 +49,11 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
                         <div
                           className="flex flex-col justify-center items-center hover:cursor-pointer text-white"
                           key={user._id}
-                          onClick={() => handleClickAndRefetchUser(user._id)}
+                          onClick={
+                            disable
+                              ? undefined
+                              : () => handleClickAndRefetchUser(user._id)
+                          }
                         >
                           <div
                             className="w-16 h-16 rounded-full bg-green-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center border-2 border-green-500 overflow-hidden"
@@ -58,14 +65,20 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
                         </div>
                       )
                   )}
-                  <div
-                    className="flex flex-col items-center justify-center hover:cursor-pointer"
-                    onClick={handleUserCreateDialog}
-                  >
-                    <div className="min-w-12 h-12 rounded-full flex items-center justify-center bg-gray-200">
-                      <div className="text-2xl font-bold text-gray-700">+</div>
+                  {!disable && (
+                    <div
+                      className="flex flex-col items-center justify-center hover:cursor-pointer"
+                      onClick={
+                        disable ? undefined : () => handleUserCreateDialog()
+                      }
+                    >
+                      <div className="min-w-12 h-12 rounded-full flex items-center justify-center bg-gray-200">
+                        <div className="text-2xl font-bold text-gray-700">
+                          +
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               {users?.some((user) => user.status === "busy") && (
@@ -80,8 +93,10 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
                             <div
                               className="flex flex-col justify-center items-center hover:cursor-pointer text-white"
                               key={user._id}
-                              onClick={() =>
-                                handleClickAndRefetchUser(user._id)
+                              onClick={
+                                disable
+                                  ? undefined
+                                  : () => handleClickAndRefetchUser(user._id)
                               }
                             >
                               <div
@@ -110,7 +125,11 @@ const UserInfoNav = ({ handleUserCreateDialog }: Props) => {
                       <div
                         className="flex flex-col justify-center items-center hover:cursor-pointer"
                         key={user._id}
-                        onClick={() => handleClickAndRefetchUser(user._id)}
+                        onClick={
+                          disable
+                            ? undefined
+                            : () => handleClickAndRefetchUser(user._id)
+                        }
                       >
                         <div
                           className=" relative w-16 h-16 rounded-full bg-gray-300 flex flex-shrink-0 justify-center items-center bg-cover bg-center border-2 border-gray-500"

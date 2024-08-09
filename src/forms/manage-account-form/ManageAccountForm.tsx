@@ -29,8 +29,7 @@ const ManageAccountForm = ({
   handleUserCreateDialog,
 }: Props) => {
   const { auth } = useAppContext();
-  const disable =
-    auth?.position !== "CEO" && auth?.position !== "Office Manager";
+  const disable = auth?.position !== "CEO";
 
   const {
     register,
@@ -165,10 +164,13 @@ const ManageAccountForm = ({
           defaultValue="Customer Service"
         >
           <option value="Customer Service">
-            Customer Service Representative
+            Customer Service Representative I
+          </option>
+          <option value="Office Supervisor">
+            Customer Service Representative II
           </option>
           <option value="Office Manager">Office Manager</option>
-          <option value="Office Supervisor">Office Supervisor</option>
+
           <option value="CEO">CEO</option>
         </select>
         {errors.position && (
