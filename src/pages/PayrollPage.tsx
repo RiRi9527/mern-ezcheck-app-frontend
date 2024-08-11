@@ -23,7 +23,7 @@ const PayrollPage = () => {
 
   useEffect(() => {
     if (!date) {
-      setDate(new Date()); // 设置为初始日期
+      setDate(new Date()); // 仅在 date 为 undefined 时设置初始日期
     }
   }, []);
 

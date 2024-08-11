@@ -163,10 +163,10 @@ const ManageAccountForm = ({
           {...register("position", { required: "This field is required" })}
           defaultValue="Customer Service"
         >
-          <option value="Customer Service">
+          <option value="Customer Service I">
             Customer Service Representative I
           </option>
-          <option value="Office Supervisor">
+          <option value="Customer Service II">
             Customer Service Representative II
           </option>
           <option value="Office Manager">Office Manager</option>
