@@ -10,7 +10,7 @@ module.exports = {
   prefix: "",
   theme: {
     fontFamily: {
-      sans: ['"Dancing Script", "cursive"'],
+      // sans: ['"Dancing Script", "cursive"'],
       // DancingScript: ['"Dancing Script", "cursive"'],
     },
     container: {
